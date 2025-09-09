@@ -46,9 +46,11 @@ Add your Taskmaster MCP server configuration. For a public server:
     "GramTaskmaster": {
       "command": "npx",
       "args": [
-          "mcp-remote",
-          "https://app.getgram.ai/mcp/your-taskmaster-slug"
-        ]
+        "mcp-remote",
+        "https://app.getgram.ai/mcp/your-taskmaster-slug",
+        "--header",
+        "MCP-TASK-MASTER-API-KEY:<your-key-here>"
+      ]
     }
   }
 }
@@ -141,4 +143,3 @@ If the tools aren't showing up in Cline:
 ## What's next
 
 Ready to build your own MCP server? [Try Gram today](https://getgram.ai) and see how easy it is to turn any API into agent-ready tools that work across all your development environments.
-

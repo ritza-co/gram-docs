@@ -54,16 +54,13 @@ So for example, if you're using the **Public Server** configuration, the JSON co
     "taskmaster": {
       "command": "npx",
       "args": [
-          "mcp-remote",
-          "https://app.getgram.ai/mcp/ritza-rzx-taskmaster",
-          "--header",
-          "MCP-TASKMASTER-APIKEY-API-KEY:${MCP_TASKMASTER_APIKEY_API_KEY}",
-          "--header",
-          "MCP-TASKMASTER-APIKEY-SERVER-URL:${MCP_TASKMASTER_APIKEY_SERVER_URL}"
-        ],
+        "mcp-remote",
+        "https://app.getgram.ai/mcp/your-taskmaster-slug",
+        "--header",
+        "MCP-TASK-MASTER-API-KEY:${MCP_TASK_MASTER_API_KEY}"
+      ],
       "env": {
-        "MCP_TASKMASTER_APIKEY_API_KEY": "your-api-key",
-        "MCP_TASKMASTER_APIKEY_SERVER_URL": "your-server-url"
+        "MCP_TASK_MASTER_API_KEY": "your-api-key"
       }
     }
   }
@@ -73,7 +70,7 @@ So for example, if you're using the **Public Server** configuration, the JSON co
 Therefore if you're using the **Public Server** configuration, run the following command in your terminal using your MCP server URL:
 
 ```bash
-claude mcp add taskmaster --scope project --env MCP_TASKMASTER_APIKEY_API_KEY=your-api-key --env MCP_TASKMASTER_APIKEY_SERVER_URL=your-server-url -- npx mcp-remote https://app.getgram.ai/mcp/your-taskmaster-slug --header "MCP-TASKMASTER-APIKEY-API-KEY:${MCP_TASKMASTER_APIKEY_API_KEY}" --header "MCP-TASKMASTER-APIKEY-SERVER-URL:${MCP_TASKMASTER_APIKEY_SERVER_URL}"
+claude mcp add taskmaster --scope project --env MCP_TASK_MASTER_API_KEY=your-api-key -- npx mcp-remote https://app.getgram.ai/mcp/your-taskmaster-slug --header "MCP-TASK-MASTER-API-KEY:${MCP_TASK_MASTER_API_KEY}"
 ```
 
 Replace `your-api-key` and `your-server-url` with the actual values from your Taskmaster MCP server configuration, and replace `ritza-rzx-taskmaster` with your actual MCP server slug.
@@ -81,7 +78,7 @@ Replace `your-api-key` and `your-server-url` with the actual values from your Ta
 If you're using the **Authenticated Server** configuration, run the following command:
 
 ```bash
-claude mcp add taskmaster --scope project --env GRAM_KEY=your-gram-api-key -- npx mcp-remote https://app.getgram.ai/mcp/your-taskmaster-slug --header "Gram-Environment:Default" --header "Authorization: ${GRAM_KEY}"
+claude mcp add taskmaster --scope project --env GRAM_KEY=your-gram-api-key -- npx mcp-remote https://app.getgram.ai/mcp/your-taskmaster-slug --header "Authorization: ${GRAM_KEY}"
 ```
 
 Replace `your-gram-api-key` with your actual Gram API key and `ritza-rzx-taskmaster` with your actual MCP server slug.
@@ -95,9 +92,7 @@ The JSON configuration looks like this:
       "command": "npx",
       "args": [
         "mcp-remote",
-        "https://app.getgram.ai/mcp/ritza-rzx-taskmaster",
-        "--header",
-        "Gram-Environment:default",
+        "https://app.getgram.ai/mcp/your-taskmaster-slug",
         "--header",
         "Authorization:${GRAM_KEY}"
       ],
@@ -153,20 +148,6 @@ Ask Claude a basic question like, "Can you help me create a new task?"
     Your browser does not support the video tag.
 </video>
 
-### Testing tool permissions
-
-Ask Claude to create a new task for your project.
-
-```
-Create a new task called "Implement user authentication" with description "Add login and registration functionality to the app"
-```
-
-![Screenshot showing Claude Code's tool permission prompt when Claude wants to use an MCP tool](/img/guides/claude-code/claude-code-tool-permission.png)
-
-Claude Code will use the `createTask` tool to create a new task and ask for permission to use it. A prompt will appear asking to confirm the tool call.
-
-![Screenshot showing the result after Claude Code successfully calls the Taskmaster API tool](/img/guides/claude-code/claude-code-push-request.png)
-
 
 ## Troubleshooting
 
@@ -182,7 +163,7 @@ claude mcp list
 
 # Remove and re-add the server
 claude mcp remove taskmaster
-claude mcp add taskmaster --scope project --env GRAM_KEY=your-gram-api-key -- npx mcp-remote https://app.getgram.ai/mcp/your-taskmaster-slug --header "Gram-Environment:Default" --header "Authorization:${GRAM_KEY}"
+claude mcp add taskmaster --scope project --env GRAM_KEY=your-gram-api-key -- npx mcp-remote https://app.getgram.ai/mcp/your-taskmaster-slug --header "Authorization:${GRAM_KEY}"
 ```
 
 ### Authentication errors
@@ -206,5 +187,4 @@ If Claude Code isn't calling the tools:
 You now have Claude Code connected to a Gram-hosted MCP server with task management capabilities.
 
 Ready to build your own MCP server? [Try Gram today](https://getgram.ai) and see how easy it is to turn any API into agent-ready tools.
-
 

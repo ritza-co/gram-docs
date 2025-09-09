@@ -50,9 +50,11 @@ Add your Taskmaster MCP server configuration from the [Creating a Taskmaster MCP
     "GramTaskmaster": {
       "command": "npx",
       "args": [
-          "mcp-remote",
-          "https://app.getgram.ai/mcp/your-taskmaster-slug"
-        ]
+        "mcp-remote",
+        "https://app.getgram.ai/mcp/your-taskmaster-slug",
+        "--header",
+        "MCP-TASK-MASTER-API-KEY:<your-key-here>"
+      ]
     }
   }
 }
@@ -92,7 +94,7 @@ Now test the connection by creating a task.
 Ask Roo Code a basic question like, "Can you create a new task called 'Test MCP connection'?"
 
 <video width="600" controls>
-  <source src="/videos/roo-code-vibe-check.mp4" type="video/mp4" />
+  <source src="/videos/roo-code-get-tasks.mp4" type="video/mp4" />
     Your browser does not support the video tag.
 </video>
 
@@ -143,5 +145,4 @@ If the tools aren't showing up in Roo Code:
 ## What's next
 
 Ready to build your own MCP server? [Try Gram today](https://getgram.ai) and see how easy it is to turn any API into agent-ready tools that work across all your development environments.
-
 

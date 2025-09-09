@@ -64,9 +64,11 @@ Add your Taskmaster MCP server configuration to the file. For a public server, i
     "GramTaskmaster": {
       "command": "npx",
       "args": [
-        "mcp-remote",
-        "https://app.getgram.ai/mcp/your-taskmaster-slug"
-      ]
+          "mcp-remote",
+          "https://app.getgram.ai/mcp/<your-slug>",
+          "--header",
+          "MCP-TASK-MASTER-API-KEY:<your-key-here>"
+        ]
     }
   }
 }
@@ -81,7 +83,7 @@ For an authenticated server, use:
       "command": "npx",
       "args": [
         "mcp-remote",
-        "https://app.getgram.ai/mcp/your-taskmaster-slug",
+        "https://app.getgram.ai/mcp/<your-slug>",
         "--header",
         "Authorization: ${GRAM_KEY}"
       ],
@@ -109,7 +111,12 @@ Claude will use your Gram-hosted MCP server to create a task by calling the Task
 
 ## Connecting Claude Desktop to your Gram-hosted MCP server using Claude Connectors
 
-Claude Connectors allow you to connect Claude Desktop to your Gram-hosted MCP server without manually editing the configuration file. This is more user-friendly, but comes with one important limitation: **your MCP server must be public**. If you need to use an authenticated server, you'll need to use the MCP configuration file method described above.
+Claude Connectors allow you to connect Claude Desktop to your Gram-hosted MCP server without manually editing the configuration file. This is more user-friendly, but comes with one important limitation: **your MCP server must be public** and must not require environment variables.
+
+
+ If you need to use an authenticated server or an environment variable, you'll need to use the MCP configuration file method described above.
+
+ For this section we'll use the [Push Advisor example](https://github.com/ritza-co/gram-examples/tree/main/push-advisor-api) MCP server.
 
 Here's how to set up a connection using Claude Connectors:
 
@@ -131,7 +138,7 @@ Click the **Add custom connector** button.
 In the popup, provide the following information:
 
 - **Name:** A descriptive name for your connector (e.g., "Taskmaster MCP Server").
-- **URL:** The URL of your Gram-hosted MCP server (e.g., `https://app.getgram.ai/mcp/your-taskmaster-slug`).
+- **URL:** The URL of your Gram-hosted MCP server (e.g., `https://app.getgram.ai/mcp/your-slug`).
 
 Claude Desktop may show a warning about trusting the server. Since this is your own MCP server, you can safely ignore this warning.
 
@@ -144,10 +151,10 @@ Click **Add** to create the connector.
 No need to restart, you can test the connection immediately. In the chat, ask Claude something that requires the MCP server, like:
 
 ```text
-Create a new task called "Test MCP connection" with description "Verify that the Taskmaster MCP server is working correctly"
+Check if I can push to prod today.
 ```
 
-Claude should prompt you with a tool call request. This means the connection is working, and Claude can now use your Gram-hosted MCP server to access the Taskmaster API.
+Claude should prompt you with a tool call request. This means the connection is working, and Claude can now use your Gram-hosted MCP server.
 
 ## Deciding which method to use
 
@@ -165,6 +172,7 @@ Both methods connect Claude Desktop to your Gram-hosted MCP server, but they hav
 | Supports authenticated server | ✅                     | ❌                        |
 | Manual configuration needed   | ✅                     | ❌                        |
 | User-friendly setup           | ❌                     | ✅                        |
+| Supports passthrough variables | ✅                     | ❌                        |
 
 ## Troubleshooting
 

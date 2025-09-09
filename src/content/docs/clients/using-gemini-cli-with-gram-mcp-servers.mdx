@@ -68,6 +68,47 @@ Gemini CLI uses a `settings.json` configuration file to manage MCP servers. You 
 
 Copy your public or authenticated MCP server configuration from Gram and add it to the `.gemini/settings.json` file.
 
+For a public server, add:
+
+```json
+{
+  "mcpServers": {
+    "GramTaskmaster": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://app.getgram.ai/mcp/your-taskmaster-slug",
+        "--header",
+        "MCP-TASK-MASTER-API-KEY:<your-key-here>"
+      ]
+    }
+  }
+}
+```
+
+For an authenticated server, add:
+
+```json
+{
+  "mcpServers": {
+    "GramTaskmaster": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://app.getgram.ai/mcp/your-taskmaster-slug",
+        "--header",
+        "Authorization: ${GRAM_KEY}"
+      ],
+      "env": {
+        "GRAM_KEY": "Bearer your-api-key-here"
+      }
+    }
+  }
+}
+```
+
+Replace `your-taskmaster-slug` with the actual slug from your Taskmaster MCP server configuration, and `<your-key-here>` with your public API key.
+
 ![Screenshot showing the Gemini CLI settings.json configuration file](/img/guides/mcp-gemini/gemini-cli-settings-json.png)
 
 ## Verifying the connection
@@ -115,9 +156,8 @@ Gemini CLI will use the `createTask` tool to create a new task. Before making th
 
 ![Screenshot showing Gemini CLI's tool permission prompt when requesting to use an MCP tool](/img/guides/mcp-gemini/gemini-cli-tool-permission.png)
 
-You can approve the tool call once, or choose to always allow this tool or all tools from the server to skip future prompts. Once approved, Gemini will make the API call and respond with the task creation results:
+You can approve the tool call once, or choose to always allow this tool or all tools from the server to skip future prompts. 
 
-![Screenshot showing the result after Gemini CLI successfully calls the Taskmaster API tool](/img/guides/mcp-gemini/gemini-cli-push-request.png)
 
 ## Troubleshooting
 

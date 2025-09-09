@@ -56,13 +56,10 @@ For a public server, the configuration will look like this:
         "mcp-remote",
         "https://app.getgram.ai/mcp/your-taskmaster-slug",
         "--header",
-        "MCP-TASKMASTER-APIKEY-API-KEY:${MCP_TASKMASTER_APIKEY_API_KEY}",
-        "--header",
-        "MCP-TASKMASTER-APIKEY-SERVER-URL:${MCP_TASKMASTER_APIKEY_SERVER_URL}"
+        "MCP-TASK-MASTER-API-KEY:${MCP_TASK_MASTER_API_KEY}"
       ],
       "env": {
-        "MCP_TASKMASTER_APIKEY_API_KEY": "your-api-key",
-        "MCP_TASKMASTER_APIKEY_SERVER_URL": "your-server-url"
+        "MCP_TASK_MASTER_API_KEY": "your-api-key"
       }
     }
   }
@@ -79,8 +76,6 @@ For an authenticated server, the configuration will look like this:
       "args": [
         "mcp-remote",
         "https://app.getgram.ai/mcp/your-taskmaster-slug",
-        "--header",
-        "Gram-Environment:Default",
         "--header",
         "Authorization: ${GRAM_KEY}"
       ],
@@ -116,11 +111,27 @@ Paste in the URL of your Taskmaster MCP server from the [Creating a Taskmaster M
 
 Your MCP server will now show up in the list of MCP servers in the `settings.json` file.
 
-![Screenshot showing the VS Code settings.json file with MCP server configuration](/img/guides/mcp-installing-ide/vscode-settings-json.png)
+### Step 2: Configure authentication
 
-### Step 2: (Optional) Configure authentication
+If you're using an **authenticated server** or you're using an environment variable, you can add the authentication details to the `settings.json` file using the configuration from your Taskmaster creation guide.
 
-If you're using an **authenticated server**, you can add the authentication details to the `settings.json` file using the configuration from your Taskmaster creation guide.
+![Screenshot showing the VS Code settings.json file with MCP server configuration](/img/guides/mcp-installing-ide/vscode-add-mcp-config-vars.png)
+
+```json
+{
+  "mcpServers": {
+    "GramTaskmaster": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://app.getgram.ai/mcp/your-taskmaster-slug",
+        "--header",
+        "MCP-TASK-MASTER-API-KEY:<your-key-here>"
+      ]
+    }
+  }
+}
+```
 
 ### Step 3: Start the server
 
@@ -166,12 +177,37 @@ In the `mcp_config.json` file that opens, replace the contents with your Taskmas
       "command": "npx",
       "args": [
         "mcp-remote",
-        "https://app.getgram.ai/mcp/your-taskmaster-slug"
+        "https://app.getgram.ai/mcp/your-taskmaster-slug",
+        "--header",
+        "MCP-TASK-MASTER-API-KEY:<your-key-here>"
       ]
     }
   }
 }
 ```
+
+
+For an authenticated server, use:
+
+```json
+{
+  "mcpServers": {
+    "GramTaskmaster": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://app.getgram.ai/mcp/your-taskmaster-slug",
+        "--header",
+        "Authorization: ${GRAM_KEY}"
+      ],
+      "env": {
+        "GRAM_KEY": "Bearer your-gram-api-key"
+      }
+    }
+  }
+}
+```
+
 
 Replace `your-taskmaster-slug` with the actual slug from your Taskmaster MCP server configuration.
 
@@ -189,13 +225,6 @@ In the **Manage plugins** tab, and click **Refresh** to reload the plugin config
 
 The Amp VS Code extension has a GUI for adding and managing MCP servers.
 
-<div class="flex justify-center">
-  <video controls>
-    <source src="/videos/amp-installing-mcp.mp4" type="video/mp4"></source>
-    Your browser does not support the video tag.
-  </video>
-</div>
-
 ### Step 1: Open Amp settings
 
 Click the **Settings** icon in the side window. Scroll down to the **MCP Servers** section and click **Add MCP Server**.
@@ -207,9 +236,13 @@ Complete the MCP server details using the configuration from your Taskmaster MCP
 - **Server Name:** `taskmaster`
 - **Command or URL:** `npx`
 - **Arguments:** Use the arguments from your Taskmaster MCP server configuration
-- **Environment Variables:** Use the environment variables from your Taskmaster MCP server configuration (if using an authenticated server)
+- **Environment Variables:** Use the environment variables from your Taskmaster MCP server configuration
 
 ![Screenshot showing the Amp MCP server configuration interface](/img/guides/mcp-installing-ide/amp-mcp-server-config.png)
+
+You can also modify the `settings.json` file directly.
+
+![Screenshot showing the Amp settings.json file with MCP server configuration](/img/guides/mcp-installing-ide/amp-settings-json.png)
 
 ### Step 3: Use the MCP server tools
 
@@ -248,20 +281,17 @@ For a public server, the configuration will look like this:
         "mcp-remote",
         "https://app.getgram.ai/mcp/your-taskmaster-slug",
         "--header",
-        "MCP-TASKMASTER-APIKEY-API-KEY:${MCP_TASKMASTER_APIKEY_API_KEY}",
-        "--header",
-        "MCP-TASKMASTER-APIKEY-SERVER-URL:${MCP_TASKMASTER_APIKEY_SERVER_URL}"
+        "MCP-TASK-MASTER-API-KEY:${MCP_TASK_MASTER_API_KEY}"
       ],
       "env": {
-        "MCP_TASKMASTER_APIKEY_API_KEY": "your-api-key",
-        "MCP_TASKMASTER_APIKEY_SERVER_URL": "your-server-url"
+        "MCP_TASK_MASTER_API_KEY": "your-api-key"
       }
     }
   }
 }
 ```
 
-![Screenshot showing the Amp CLI settings configuration](/img/guides/mcp-installing-ide/amp-cli-settings.png)
+![Screenshot showing the Amp settings.json file with MCP server configuration](/img/guides/mcp-installing-ide/amp-settings-json.png)
 
 For an authenticated server, the configuration will look like this:
 
@@ -273,8 +303,6 @@ For an authenticated server, the configuration will look like this:
       "args": [
         "mcp-remote",
         "https://app.getgram.ai/mcp/your-taskmaster-slug",
-        "--header",
-        "Gram-Environment:Default",
         "--header",
         "Authorization: ${GRAM_KEY}"
       ],
@@ -330,5 +358,4 @@ If the tools aren't showing up in your MCP client:
 ## What's next
 
 Ready to build your own MCP server? [Try Gram today](https://getgram.ai) and see how easy it is to turn any API into agent-ready tools that work across all your development environments.
-
 
