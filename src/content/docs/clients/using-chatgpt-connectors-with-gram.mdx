@@ -5,13 +5,13 @@ sidebar:
   order: 8
 ---
 
-[ChatGPT's](https://chatgpt.com/) new Developer Mode lets you wire external capabilities into ChatGPT via custom connectors. 
+[ChatGPT's](https://chatgpt.com/) new Developer Mode lets you wire external capabilities into ChatGPT via custom connectors.
 
 :::note[Developer Mode]
-Developer Mode is currently only available to Plus and Pro plans. It is not available to Free or Business plans. You can [read more about Developer Mode in OpenAI's docs here](https://platform.openai.com/docs/guides/developer-mode). 
+Developer Mode is currently only available to Plus and Pro plans. It is not available to Free or Business plans. You can [read more about Developer Mode in OpenAI's docs here](https://platform.openai.com/docs/guides/developer-mode).
 :::
 
-When combined with [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) servers hosted on [Gram](/gram-quickstart), you can give ChatGPT access to your APIs and tools in just a few minutes. 
+When combined with [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) servers hosted on [Gram](/gram-quickstart), you can give ChatGPT access to your APIs and tools in just a few minutes.
 
 ![Screenshot showing Acme Todo in ChatGPT preview](/img/guides/chatgpt/acme-todo-in-chatgpt-preview.png)
 
@@ -37,9 +37,9 @@ In the [Gram dashboard](https://app.getgram.ai), click **New Project** to start 
 
 Enter a project name and click **Submit**.
 
-Gram will then guide you through the following steps.
-
 ![Screenshot of the Gram dashboard showing the New Project link](/img/guides/chatgpt/create-new-project.png)
+
+Click **Get Stared** on the project home page. Gram will then guide you through the following steps.
 
 #### Step 1: Upload the OpenAPI document
 
@@ -49,7 +49,7 @@ Upload the Acme Todo OpenAPI document [`acmetodo.yaml`](https://github.com/ritza
 
 #### Step 2: Create a toolset
 
-Give your toolset a name (for example, "Acme Todo") and click **Continue**.
+Give your toolset a name (for example, "Acmetodo") and click **Continue**.
 
 Notice that the names of the tools that will be generated from your OpenAPI document are displayed in this dialog.
 
@@ -63,7 +63,7 @@ Enter a URL slug for the MCP server (for example, `acme-todo`) and click **Conti
 
 Gram will create the toolset from the OpenAPI document.
 
-Click **Toolsets** in the sidebar to view the Acme Todo toolset.
+Click **Toolsets** in the sidebar to view the Acmetodo toolset.
 
 You can edit the individual tools in the toolset by clicking on the tool name and the tool description.
 
@@ -72,18 +72,18 @@ You can edit the individual tools in the toolset by clicking on the tool name an
 ### Configuring environment variables
 
 :::note[Server URL]
-By default, the server URL is set by the OpenAPI document. The `acme-todo` openapi document uses a base URL of `https://api.ritzademo.com` which points to our live demo todo. 
+By default, the server URL is set by the OpenAPI document. The `acmetodo` openapi document uses a base URL of `https://api.ritzademo.com` which points to our live demo acmetodo API.
 
 If you are using your own API, you will need to set the server URL to the URL of your deployment. You can either edit the OpenAPI document and skip the step below, or set the server URL in the environment variables.
 :::
 
 [Environments](/concepts/environments) store API keys and configuration separate from your toolset logic.
 
-In the **Environments** tab, click the "Default" environment. Click the three dots in the top right corner of the environment card and then **Fill for Toolset**. Select the **Acme Todo** toolset and click **Fill Variables** to automatically populate the required variables.
-
-Set the base URL variable for your API. For example, if your Acme Todo API is deployed at `https://acme-todo.example.com`, set `ACME_TODO_SERVER_URL` to that value. Click **Update** and then **Save**.
+In the **Environments** tab, click the "Default" environment. Click the three dots in the top right corner of the environment card and then **Fill for Toolset**. Select the **Acmetodo** toolset and click **Fill Variables** to automatically populate the required variables.
 
 ![Screenshot showing the fill for toolset dialog to automatically populate required variables](/img/guides/chatgpt/env-fill-vars.png)
+
+Set the base URL variable for your API. For example, if your Acmetodo API is deployed at `https://acme-todo.example.com`, set `ACMETODO_SERVER_URL` to that value. Click **Save**.
 
 ![Screenshot showing setting the server URL environment variable](/img/guides/chatgpt/add-server-url.png)
 
@@ -91,7 +91,15 @@ Set the base URL variable for your API. For example, if your Acme Todo API is de
 
 Let's make the toolset available as an MCP server.
 
-Go to the **MCP** tab, find the Acme Todo toolset and click on it to open the MCP details page.
+Go to the **MCP** tab, find the Acmetodo toolset and click on it to open the MCP details page.
+
+Enable the MCP server by clicking the **Enable** button and then **Enable Server**.
+
+![Screenshot showing the enable button to enable the MCP server](/img/guides/chatgpt/enable-mcp.png)
+
+Scroll down to the **Visibility** section and ensure the visibility of the server is set to **Public**.
+
+![Screenshot showing server visibility](/img/guides/chatgpt/server-visibility.png)
 
 Scroll down to the **Hosted URL** section and copy the URL.
 
@@ -104,18 +112,19 @@ ChatGPT supports MCP servers as connectors in Developer Mode. Here's how to add 
 ### Add a Remote MCP server connector in ChatGPT
 
 1. In Gram, go to the **MCP** tab for your toolset, and copy the **Hosted URL**.
-2. In ChatGPT, open settings, go to the **Connectors** tab and scroll down to **Advanced settings**. Click the **Enable Developer Mode** switch.
+2. In ChatGPT web, open settings, go to the **Connectors** tab and scroll down to **Advanced settings**. Click the **Enable Developer Mode** switch.
 
    ![Enable Developer Mode](/img/guides/chatgpt/enable-developer-mode.png)
 
 3. Go back to the **Connectors** tab and click the **Create** button.
 
    ![Open Connectors and add a new Remote MCP](/img/guides/chatgpt/connectors-create-button.png)
-4. Fill in the details exactly as shown in the dialog:
-   - **Name**: `AcmeTodo`
+
+4. Fill in the details as shown in the dialog:
+   - **Name**: `Acmetodo`
    - **Description**: The description of the connector.
    - **Server URL**: Paste your Gram Hosted URL
-   - **Authentication**: Here you can choose to use OAuth for authentication. The acme todo MCP server doesn't require authentication so we'll choose **None**.
+   - **Authentication**: Here you can choose to use OAuth for authentication. The acme todo MCP server doesn't require authentication so we'll choose **No authentication**.
 
     ![Add Remote MCP server connector dialog](/img/guides/chatgpt/add-remote-mcp.png)
 
@@ -136,14 +145,14 @@ Start a new chat in ChatGPT, click the **+** icon to open the dropdown and selec
 
 ![Enable Developer Mode for the chat](/img/guides/chatgpt/enable-developer-mode-chat.png)
 
-Enable the Acme Todo connector.
+Enable the Acmetodo connector.
 
 ![Enable the Acme MCP tool in chat](/img/guides/chatgpt/enable-acme-mcp.png)
 
 Ask something that requires the Acme Todo API, for example:
 
 ```
-Create a new task, I need to go for a hike this Saturday.
+Create a new task, I need to go for a hike this Saturday. Use acme todo.
 ```
 
 <video width="600" controls>
@@ -156,7 +165,7 @@ Create a new task, I need to go for a hike this Saturday.
 - **Connector not connecting**: Verify the MCP server URL in the tool matches the one in Gram. You can test the MCP server first in the **Gram Playground**.
 
 ![Screenshot showing how to test an MCP server in the Gram Playground](/img/guides/chatgpt/playground-test.png)
-- **Authentication errors**: For private servers, confirm your Gram API key in **Settings > API Keys** and ensure the `Authorization: Bearer ...` header is configured in ChatGPT.
+- **Authentication errors**: For private servers, confirm your Gram API key in **Settings -> API Keys** and ensure the `Authorization: Bearer ...` header is configured in ChatGPT.
 - **Tools not appearing**: Confirm your toolset includes the expected tools and the environment variables are set. Re-publish the server if you updated the toolset.
 
 ## What's next
