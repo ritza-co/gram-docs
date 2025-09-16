@@ -32,13 +32,13 @@ Before connecting Cline to a Taskmaster MCP server, you'll need to create one fi
 
 Now we'll connect Cline to your Taskmaster MCP server.
 
-Cline uses a configuration file to manage MCP servers. 
+Cline uses a configuration file to manage MCP servers.
 
 To add a server to Cline, open the Cline panel in VS Code, click the **MCP Servers** icon in the Cline chat interface, and select the **Remote Servers** tab. Click **Edit Configuration** to open the `cline_mcp_settings.json` file.
 
 ![Screenshot showing the Cline MCP settings button](/img/guides/mcp-installing-cline/cline-mcp-button.png)
 
-Add your Taskmaster MCP server configuration. For a public server:
+Add your Taskmaster MCP server configuration. For Pass-through Authentication the configuration looks like this:
 
 ```json
 {
@@ -49,14 +49,14 @@ Add your Taskmaster MCP server configuration. For a public server:
         "mcp-remote",
         "https://app.getgram.ai/mcp/your-taskmaster-slug",
         "--header",
-        "MCP-TASK-MASTER-API-KEY:<your-key-here>"
+        "MCP-TASKMASTER-API-KEY:<your-key-here>"
       ]
     }
   }
 }
 ```
 
-If you're using an authenticated server, add the following configuration:
+For a Managed Authentication server, the configuration looks like:
 
 ```json
 {
@@ -70,14 +70,14 @@ If you're using an authenticated server, add the following configuration:
         "Authorization: ${GRAM_KEY}"
       ],
       "env": {
-        "GRAM_KEY": "Bearer <your-key-here>"
+        "GRAM_KEY": "Bearer <your-gram-api-key>"
       }
     }
   }
 }
 ```
 
-Replace `your-taskmaster-slug` with the actual slug from your Taskmaster MCP server configuration.
+Replace `your-taskmaster-slug` with the actual slug from your Taskmaster MCP server configuration and `<your-gram-api-key>` with Gram API key.
 
 You'll need an API key to use an authenticated server. [Generate an API key](/concepts/api-keys) in the Gram **Settings** tab and replace `<your-key-here>` with your actual Gram API key.
 
@@ -89,18 +89,13 @@ Save the configuration, and your MCP server should show up in Cline's server lis
 
 Now test the connection by creating a task.
 
-Ask Cline a basic question like, "Can you create a new task called 'Test MCP connection'?"
+Ask Cline a question like, "List my projects?"
 
-<video width="600" controls>
-  <source src="/videos/cline-vibe-check.mp4" type="video/mp4" />
-    Your browser does not support the video tag.
-</video>
-
-Cline will use the `createTask` tool to create a new task. Before making the API call, it will ask for your permission to use the tool:
+Cline will use the `getProjects` tool to get a list of your projects. Before making the API call, it will ask for your permission to use the tool:
 
 ![Screenshot showing Cline asking for permission to use the tool](/img/guides/mcp-installing-cline/cline-tool-permission.png)
 
-You can approve the tool call once or select **Auto-approve** to always allow this tool and skip future confirmation prompts. Once approved, Cline will make the API call and respond with the vibe check results.
+You can approve the tool call once or select **Auto-approve** to always allow this tool and skip future confirmation prompts. Once approved, Cline will make the API call and respond with the tool call results.
 
 ## Troubleshooting
 
@@ -127,7 +122,7 @@ If you're having trouble connecting to the MCP server:
 
 If you're using an authenticated server and getting authentication errors:
 
-- Verify your Gram API key in the dashboard under **Settings > API Keys**.
+- Verify your Gram API key in the dashboard under **Settings -> API Keys**.
 - Ensure the API key is correctly formatted with the `Bearer ` prefix.
 - Check that the `GRAM_KEY` environment variable is properly set in your configuration.
 
