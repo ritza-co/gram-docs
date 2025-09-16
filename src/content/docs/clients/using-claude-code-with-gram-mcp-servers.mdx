@@ -44,9 +44,9 @@ Before connecting Claude Code to a Taskmaster MCP server, you'll need to create 
 
 Now we'll connect Claude Code to your Taskmaster MCP server.
 
-Claude Code approaches MCP server configuration differently from Claude Desktop. Instead of using a JSON config file, you add servers using the `claude mcp add` command.
+To add an MCP server in Claude Code  use the `claude mcp add` command.
 
-So for example, if you're using the **Public Server** configuration, the JSON configuration looks like this:
+If you're using the **Pass-through Authentication** configuration, the JSON configuration looks like this:
 
 ```json
 {
@@ -57,31 +57,28 @@ So for example, if you're using the **Public Server** configuration, the JSON co
         "mcp-remote",
         "https://app.getgram.ai/mcp/your-taskmaster-slug",
         "--header",
-        "MCP-TASK-MASTER-API-KEY:${MCP_TASK_MASTER_API_KEY}"
-      ],
-      "env": {
-        "MCP_TASK_MASTER_API_KEY": "your-api-key"
-      }
+        "MCP-TASKMASTER-API-KEY:<your-api-key>"
+      ]
     }
   }
 }
 ```
 
-Therefore if you're using the **Public Server** configuration, run the following command in your terminal using your MCP server URL:
+Therefore, you can run the following command in your terminal using your own MCP server URL to add the server:
 
 ```bash
-claude mcp add taskmaster --scope project --env MCP_TASK_MASTER_API_KEY=your-api-key -- npx mcp-remote https://app.getgram.ai/mcp/your-taskmaster-slug --header "MCP-TASK-MASTER-API-KEY:${MCP_TASK_MASTER_API_KEY}"
+claude mcp add taskmaster --scope project -- npx mcp-remote https://app.getgram.ai/mcp/your-taskmaster-slug --header "MCP-TASKMASTER-API-KEY:<your-api-key>"
 ```
 
-Replace `your-api-key` and `your-server-url` with the actual values from your Taskmaster MCP server configuration, and replace `ritza-rzx-taskmaster` with your actual MCP server slug.
+Replace `<your-api-key>` with the actual values from your Taskmaster MCP server configuration, and replace `your-taskmaster-slug` with your actual MCP server slug.
 
-If you're using the **Authenticated Server** configuration, run the following command:
+If you're using the **Managed Authentication** configuration, run the following command:
 
 ```bash
-claude mcp add taskmaster --scope project --env GRAM_KEY=your-gram-api-key -- npx mcp-remote https://app.getgram.ai/mcp/your-taskmaster-slug --header "Authorization: ${GRAM_KEY}"
+claude mcp add taskmaster --scope project -- npx mcp-remote https://app.getgram.ai/mcp/your-taskmaster-slug --header "Authorization: Bearer <your-gram-api-key>"
 ```
 
-Replace `your-gram-api-key` with your actual Gram API key and `ritza-rzx-taskmaster` with your actual MCP server slug.
+Replace `<your-gram-api-key>` with your actual Gram API key and `your-taskmaster-slug` with your actual MCP server slug.
 
 The JSON configuration looks like this:
 
@@ -94,11 +91,8 @@ The JSON configuration looks like this:
         "mcp-remote",
         "https://app.getgram.ai/mcp/your-taskmaster-slug",
         "--header",
-        "Authorization:${GRAM_KEY}"
-      ],
-      "env": {
-        "GRAM_KEY": "Bearer your-gram-api-key"
-      }
+        "Authorization:Bearer <your-gram-api-key>"
+      ]
     }
   }
 }
@@ -107,8 +101,7 @@ The JSON configuration looks like this:
 Here's what these commands do:
 
 - `taskmaster` - The name you're giving the server locally.
-- `--scope project` adds the server to a local .mcp.json file that can be checked into your source control and shared with other users on the project. You can [read more about other scope options](https://docs.anthropic.com/en/docs/claude-code/mcp#mcp-installation-scopes) at Anthropic's documentation.
-- `--env KEY=value` - Sets environment variables that will be available to the MCP server.
+- `--scope project` adds the server to a local `.mcp.json` file that can be shared with other users on the project. You can [read more about other scope options](https://docs.anthropic.com/en/docs/claude-code/mcp#mcp-installation-scopes) at Anthropic's documentation.
 - `--` - Separates Claude Code flags from the server command.
 - `npx mcp-remote` - The package that handles remote MCP server connections.
 - `--header` - The flag that passes headers to the remote server.
@@ -121,7 +114,7 @@ Check that the server was added successfully:
 claude mcp list
 ```
 
-You should see `taskmaster` in the list. 
+You should see `taskmaster` in the list.
 
 To see the full configuration:
 
@@ -163,14 +156,14 @@ claude mcp list
 
 # Remove and re-add the server
 claude mcp remove taskmaster
-claude mcp add taskmaster --scope project --env GRAM_KEY=your-gram-api-key -- npx mcp-remote https://app.getgram.ai/mcp/your-taskmaster-slug --header "Authorization:${GRAM_KEY}"
+claude mcp add taskmaster --scope project -- npx mcp-remote https://app.getgram.ai/mcp/your-taskmaster-slug --header "Authorization:Bearer <your-gram-api-key>"
 ```
 
 ### Authentication errors
 
 If you get authentication errors:
 
-- Verify your Gram API key in the dashboard under **Settings > API Keys**. 
+- Verify your Gram API key in the dashboard under **Settings -> API Keys**.
 - Check that environment variables are correctly set in Gram.
 - Ensure the Taskmaster API base URL is accessible.
 
