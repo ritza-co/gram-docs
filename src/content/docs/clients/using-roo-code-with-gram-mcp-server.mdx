@@ -40,9 +40,7 @@ To add a server to Roo Code, click the **Server** icon at the top right of the R
 
 Click **Edit Global MCP** to open Roo Code's global MCP server `mcp_settings.json` file.
 
-![Screenshot showing the Roo Code MCP server mcp_settings.json file](/img/guides/mcp-installing-roo-code/roo-code-settings-paste.png)
-
-Add your Taskmaster MCP server configuration from the [Creating a Taskmaster MCP server](/build-mcp/creating-taskmaster-mcp-server) guide. If you're using a public server, add the following to the `mcp_settings.json` file:
+Add your Taskmaster MCP server configuration from the [Creating a Taskmaster MCP server](/build-mcp/creating-taskmaster-mcp-server) guide. If you're using a  **Pass-through Authentication**, add the following to the `mcp_settings.json` file:
 
 ```json
 {
@@ -53,14 +51,14 @@ Add your Taskmaster MCP server configuration from the [Creating a Taskmaster MCP
         "mcp-remote",
         "https://app.getgram.ai/mcp/your-taskmaster-slug",
         "--header",
-        "MCP-TASK-MASTER-API-KEY:<your-key-here>"
+        "MCP-TASKMASTER-API-KEY:<your-key-here>"
       ]
     }
   }
 }
 ```
 
-If you're using an authenticated server, add the following:
+For a **Managed Authentication** server, the configuration looks like:
 
 ```json
 {
@@ -74,14 +72,14 @@ If you're using an authenticated server, add the following:
         "Authorization: ${GRAM_KEY}"
       ],
       "env": {
-        "GRAM_KEY": "Bearer <your-key-here>"
+        "GRAM_KEY": "Bearer <your-gram-api-key>"
       }
     }
   }
 }
 ```
 
-Replace `your-taskmaster-slug` with the actual slug from your Taskmaster MCP server configuration.
+Replace `your-taskmaster-slug` with the actual slug from your Taskmaster MCP server configuration and `<your-gram-api-key>` with Gram API key.
 
 Save the file, and your MCP server should show up in the Roo Code MCP server list.
 
@@ -129,7 +127,7 @@ If you're having trouble connecting to the MCP server:
 
 If you're using an authenticated server and getting authentication errors:
 
-- Verify your Gram API key in the dashboard under **Settings > API Keys**.
+- Verify your Gram API key in the dashboard under **Settings -> API Keys**.
 - Ensure the API key is correctly formatted with the `Bearer ` prefix.
 - Check that the `GRAM_KEY` environment variable is properly set in your configuration.
 
