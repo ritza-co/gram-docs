@@ -1,5 +1,5 @@
 ---
-title: "Using OpenAI API with Gram-hosted MCP servers"
+title: "Using OpenAI's Responses API with Gram-hosted MCP servers"
 description: "Learn how to connect OpenAI's Responses API to Gram-hosted MCP servers, giving GPT models access to your APIs and tools."
 sidebar:
   order: 1
@@ -10,6 +10,15 @@ OpenAI's [Responses API](https://platform.openai.com/docs/api-reference/response
 This guide will show you how to connect OpenAI's API to a Gram-hosted MCP server using an example [Push Advisor API](https://github.com/ritza-co/gram-examples/blob/main/push-advisor-api/openapi.yaml). You'll learn how to create an MCP server from an OpenAPI document, set up the connection, configure authentication, and use natural language to query the example API.
 
 Find the full code and OpenAPI document in the [Push Advisor API repository](https://github.com/ritza-co/gram-examples/tree/main/push-advisor-api).
+
+## Understanding OpenAI API Options
+
+OpenAI provides two main approaches for integrating with MCP servers:
+
+- **Responses API** (this guide): Simple request-response pattern, ideal for basic tool calling and quick integrations
+- **[Agents SDK](/api-clients/using-openai-agents-sdk-with-gram-mcp-servers)**: Advanced agent framework with sessions, handoffs, and persistent context, perfect for complex conversational workflows
+
+If you need more advanced features like persistent conversations or complex workflows, consider the [Agents SDK guide](/api-clients/using-openai-agents-sdk-with-gram-mcp-servers).
 
 ## Prerequisites
 
