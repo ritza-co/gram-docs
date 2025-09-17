@@ -73,6 +73,7 @@ Throughout this guide, replace `your-taskmaster-slug` with your actual MCP serve
 Here's a basic example using a public Gram MCP server:
 
 ```python
+import os
 from agents import Agent, Runner, HostedMCPTool
 
 # Configure the TaskMaster MCP tool
@@ -81,6 +82,9 @@ taskmaster_tool = HostedMCPTool(
         "type": "mcp",
         "server_label": "taskmaster",
         "server_url": "https://app.getgram.ai/mcp/your-taskmaster-slug",
+        "headers": {
+            "MCP-TASKMASTER-API-KEY": os.getenv("MCP_TASKMASTER_API_KEY")
+        },
         "require_approval": "never"
     }
 )
@@ -155,6 +159,7 @@ The Agents SDK provides several advanced features that go beyond simple tool cal
 Unlike the Responses API, agents maintain conversation history automatically:
 
 ```python
+import os
 from agents import Agent, Runner, HostedMCPTool
 
 taskmaster_tool = HostedMCPTool(
@@ -162,6 +167,9 @@ taskmaster_tool = HostedMCPTool(
         "type": "mcp",
         "server_label": "taskmaster",
         "server_url": "https://app.getgram.ai/mcp/your-taskmaster-slug",
+        "headers": {
+            "MCP-TASKMASTER-API-KEY": os.getenv("MCP_TASKMASTER_API_KEY")
+        },
         "require_approval": "never"
     }
 )
@@ -195,6 +203,7 @@ print("Third:", result3.final_output)
 For production environments, you can implement approval workflows:
 
 ```python
+import os
 from agents import Agent, Runner, HostedMCPTool, MCPToolApprovalRequest, MCPToolApprovalFunctionResult
 
 # Define which tools require approval
@@ -216,6 +225,9 @@ taskmaster_tool = HostedMCPTool(
         "type": "mcp",
         "server_label": "taskmaster",
         "server_url": "https://app.getgram.ai/mcp/your-taskmaster-slug",
+        "headers": {
+            "MCP-TASKMASTER-API-KEY": os.getenv("MCP_TASKMASTER_API_KEY")
+        },
         "require_approval": "always"
     },
     on_approval_request=approve_tool_call
@@ -233,6 +245,7 @@ agent = Agent(
 The Agents SDK provides built-in error handling:
 
 ```python
+import os
 from agents import Agent, Runner, HostedMCPTool
 
 taskmaster_tool = HostedMCPTool(
@@ -240,6 +253,9 @@ taskmaster_tool = HostedMCPTool(
         "type": "mcp",
         "server_label": "taskmaster",
         "server_url": "https://app.getgram.ai/mcp/your-taskmaster-slug",
+        "headers": {
+            "MCP-TASKMASTER-API-KEY": os.getenv("MCP_TASKMASTER_API_KEY")
+        },
         "require_approval": "never"
     }
 )
@@ -329,6 +345,7 @@ if __name__ == "__main__":
 You can control which tools are available to your agent:
 
 ```python
+import os
 from agents import Agent, Runner, HostedMCPTool
 
 # Create MCP tool with specific tool restrictions
@@ -337,6 +354,9 @@ taskmaster_tool = HostedMCPTool(
         "type": "mcp",
         "server_label": "taskmaster",
         "server_url": "https://app.getgram.ai/mcp/your-taskmaster-slug",
+        "headers": {
+            "MCP-TASKMASTER-API-KEY": os.getenv("MCP_TASKMASTER_API_KEY")
+        },
         "allowed_tools": [
             "taskmaster_get_tasks",
             "taskmaster_create_task",
