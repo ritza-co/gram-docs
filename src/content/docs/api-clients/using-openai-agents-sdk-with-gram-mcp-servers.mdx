@@ -61,7 +61,6 @@ Set your OpenAI API key and TaskMaster credentials:
 ```bash
 export OPENAI_API_KEY=your-openai-api-key-here
 export MCP_TASKMASTER_API_KEY=your-taskmaster-api-key
-export MCP_TASKMASTER_OAUTH_TOKEN_ACCESS_TOKEN=your-taskmaster-oauth-token
 ```
 
 :::note[Code Examples]
@@ -107,9 +106,8 @@ from agents import Agent, Runner, HostedMCPTool
 
 # Load TaskMaster credentials from environment
 API_KEY = os.getenv("MCP_TASKMASTER_API_KEY")
-ACCESS_TOKEN = os.getenv("MCP_TASKMASTER_OAUTH_TOKEN_ACCESS_TOKEN")
 
-if not API_KEY or not ACCESS_TOKEN:
+if not API_KEY:
     raise ValueError("Missing TaskMaster environment variables")
 
 # Configure authenticated TaskMaster MCP tool
@@ -119,8 +117,7 @@ taskmaster_tool = HostedMCPTool(
         "server_label": "taskmaster",
         "server_url": "https://app.getgram.ai/mcp/your-taskmaster-slug",
         "headers": {
-            "MCP-TASKMASTER-API-KEY": API_KEY,
-            "MCP-TASKMASTER-OAUTH-TOKEN-ACCESS-TOKEN": ACCESS_TOKEN
+            "MCP-TASKMASTER-API-KEY": API_KEY
         },
         "require_approval": "never"
     }
@@ -277,8 +274,7 @@ def create_task_manager_agent():
             "server_label": "taskmaster",
             "server_url": "https://app.getgram.ai/mcp/your-taskmaster-slug",
             "headers": {
-                "MCP-TASKMASTER-API-KEY": os.getenv('MCP_TASKMASTER_API_KEY'),
-                "MCP-TASKMASTER-OAUTH-TOKEN-ACCESS-TOKEN": os.getenv('MCP_TASKMASTER_OAUTH_TOKEN_ACCESS_TOKEN')
+                "MCP-TASKMASTER-API-KEY": os.getenv('MCP_TASKMASTER_API_KEY')
             },
             "require_approval": "never"
         }
@@ -355,45 +351,6 @@ agent = Agent(
     instructions="You can view and create tasks, but cannot delete anything.",
     tools=[taskmaster_tool]
 )
-```
-
-## Comparing with Responses API
-
-Here's how the same task management scenario differs between approaches:
-
-### Responses API (stateless)
-```python
-from openai import OpenAI
-
-client = OpenAI()
-
-# Each call is independent
-response1 = client.responses.create(
-    model="gpt-4.1",
-    tools=[{"type": "mcp", "server_url": "..."}],
-    input="Create a project called 'Website Redesign'"
-)
-
-# Must manually track context
-response2 = client.responses.create(
-    model="gpt-4.1",
-    tools=[{"type": "mcp", "server_url": "..."}],
-    input="Add a task to the Website Redesign project: 'Design homepage'"
-)
-```
-
-### Agents SDK (stateful)
-```python
-from agents import Agent, Runner, HostedMCPTool
-
-agent = Agent(
-    name="Project Manager",
-    tools=[taskmaster_tool]
-)
-
-# Context automatically maintained
-result1 = Runner.run_sync(agent, "Create a project called 'Website Redesign'")
-result2 = Runner.run_sync(agent, "Add a task to that project: 'Design homepage'")
 ```
 
 ## Testing your integration
