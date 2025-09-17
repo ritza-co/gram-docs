@@ -61,6 +61,7 @@ Set your OpenAI API key and TaskMaster credentials:
 ```bash
 export OPENAI_API_KEY=your-openai-api-key-here
 export MCP_TASKMASTER_API_KEY=your-taskmaster-api-key
+export GRAM_KEY=your-gram-api-key  # Optional: only needed for private MCP servers
 ```
 
 :::note[Code Examples]
@@ -106,9 +107,10 @@ from agents import Agent, Runner, HostedMCPTool
 
 # Load TaskMaster credentials from environment
 API_KEY = os.getenv("MCP_TASKMASTER_API_KEY")
+GRAM_KEY = os.getenv("GRAM_KEY")
 
-if not API_KEY:
-    raise ValueError("Missing TaskMaster environment variables")
+if not API_KEY or not GRAM_KEY:
+    raise ValueError("Missing TaskMaster or Gram environment variables")
 
 # Configure authenticated TaskMaster MCP tool
 taskmaster_tool = HostedMCPTool(
@@ -117,6 +119,7 @@ taskmaster_tool = HostedMCPTool(
         "server_label": "taskmaster",
         "server_url": "https://app.getgram.ai/mcp/your-taskmaster-slug",
         "headers": {
+            "Authorization": f"Bearer {GRAM_KEY}",
             "MCP-TASKMASTER-API-KEY": API_KEY
         },
         "require_approval": "never"
@@ -335,12 +338,11 @@ taskmaster_tool = HostedMCPTool(
         "server_label": "taskmaster",
         "server_url": "https://app.getgram.ai/mcp/your-taskmaster-slug",
         "allowed_tools": [
-            # Example tool names - replace with actual tool names from your MCP server
-            "your_server_list_tasks",
-            "your_server_create_task",
-            "your_server_update_task",
-            "your_server_get_project"
-            # Note: Tool names vary by MCP server implementation
+            "taskmaster_get_tasks",
+            "taskmaster_create_task",
+            "taskmaster_update_task",
+            "taskmaster_get_projects"
+            # Note: Exclude deletion tools for read-only access
         ],
         "require_approval": "never"
     }
@@ -352,6 +354,8 @@ agent = Agent(
     tools=[taskmaster_tool]
 )
 ```
+
+For example, Taskmaster MCP servers provide tools like `taskmaster_get_tasks`, `taskmaster_create_task`, `taskmaster_delete_task`, `taskmaster_get_projects`, and `taskmaster_create_project`. The exact tool names depend on your MCP server configuration.
 
 ## Testing your integration
 
