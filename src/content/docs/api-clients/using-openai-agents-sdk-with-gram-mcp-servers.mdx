@@ -110,11 +110,10 @@ import os
 from agents import Agent, Runner, HostedMCPTool
 
 # Load TaskMaster credentials from environment
-API_KEY = os.getenv("MCP_TASKMASTER_API_KEY")
 GRAM_KEY = os.getenv("GRAM_KEY")
 
-if not API_KEY or not GRAM_KEY:
-    raise ValueError("Missing TaskMaster or Gram environment variables")
+if not GRAM_KEY:
+    raise ValueError("Missing Gram environment variable")
 
 # Configure authenticated TaskMaster MCP tool
 taskmaster_tool = HostedMCPTool(
@@ -124,7 +123,6 @@ taskmaster_tool = HostedMCPTool(
         "server_url": "https://app.getgram.ai/mcp/your-taskmaster-slug",
         "headers": {
             "Authorization": f"Bearer {GRAM_KEY}",
-            "MCP-TASKMASTER-API-KEY": API_KEY
         },
         "require_approval": "never"
     }
@@ -405,7 +403,7 @@ When the browser opens:
 
 Note: TaskMaster servers use custom authentication headers that may not be fully supported by the standard MCP Inspector interface. For guaranteed testing, use the Gram Playground or the code examples in this guide.
 
-![Screenshot of the MCP Inspector connecting to a TaskMaster MCP server](/img/guides/agents-sdk/mcp-inspector-taskmaster.png)
+![Screenshot of the MCP Inspector connecting to a TaskMaster MCP server](/img/guides/agents-sdk/mcp-debugger.png)
 
 ### Debug agent interactions
 
