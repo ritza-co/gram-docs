@@ -64,7 +64,7 @@ To add an MCP server in Claude Code, use the `claude mcp add` command in your te
     }
     ```
 
-    So you can add the server by running the following command (replace `<your-api-key>` with the actual values from your Taskmaster MCP server configuration and `your-taskmaster-slug` with your MCP server slug):
+    So you can add the server by running the following (replace `<your-api-key>` with the actual values from your Taskmaster MCP server configuration and `your-taskmaster-slug` with your MCP server slug):
 
     ```bash
     claude mcp add taskmaster --scope project -- npx mcp-remote https://app.getgram.ai/mcp/your-taskmaster-slug --header "MCP-TASKMASTER-API-KEY:<your-api-key>"
@@ -88,7 +88,7 @@ To add an MCP server in Claude Code, use the `claude mcp add` command in your te
     }
     ```
 
-    So you can add the server by running the following command (replace `<your-gram-api-key>` with your actual Gram API key and `your-taskmaster-slug` with your MCP server slug):
+    So you can add the server by running the following (replace `<your-gram-api-key>` with your actual Gram API key and `your-taskmaster-slug` with your MCP server slug):
 
     ```bash
     claude mcp add taskmaster --scope project -- npx mcp-remote https://app.getgram.ai/mcp/your-taskmaster-slug --header "Authorization: Bearer <your-gram-api-key>"
