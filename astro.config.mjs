@@ -108,8 +108,12 @@ export default defineConfig({
           },
           {
             label: "Guides", 
-            link: "/clients/using-claude-code-with-gram-mcp-servers",
+            link: "/guides",
             items: [
+              {
+                label: "Guides",
+                link: "/guides",
+              },
               {
                 label: "Integration Guides",
                 autogenerate: { directory: "clients" },
