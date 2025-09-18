@@ -22,16 +22,16 @@ Taskmaster is a full-stack CRUD application for tasks and projects. It includes:
 - OAuth 2.0 authentication
 - A Neon PostgreSQL database for storing tasks and projects
 
-You can manage your tasks and projects using the web UI or the built-in HTTP API. However, in this guide we want to use MCP to manage our tasks and projects.
+This guide focuses on using Taskmaster to manage tasks and projects via an MCP server, although you can also manage them using the web UI or the built-in HTTP API.
 
-You can find the full code and OpenAPI document in the [Taskmaster repository](https://github.com/speakeasy-api/taskmaster).
+Find the full code and OpenAPI document in the [Taskmaster repository](https://github.com/speakeasy-api/taskmaster).
 
 ## Prerequisites
 
-You'll need:
+To follow this tutorial, you need:
 
-- A [Gram account](https://app.getgram.ai).
-- Access to Taskmaster, you can use our demo app [here](https://taskmaster-speakeasyapi.vercel.app/) or self-host your own instance.
+- A [Gram account](https://app.getgram.ai)
+- Access to Taskmaster, using our [demo app](https://taskmaster-speakeasyapi.vercel.app/) or your own self-hosted instance
 
 ## Setting up a Gram project
 
@@ -41,46 +41,45 @@ In the [Gram dashboard](https://app.getgram.ai), click **New Project** to start 
 
 Enter a project name and click **Submit**. 
 
-Gram will then guide you through the following steps.
+Gram will then guide you through the following steps:
 
-### Step 1: Upload the OpenAPI document
+### 1. Upload the OpenAPI document
 
 Upload the [Taskmaster OpenAPI document](https://github.com/speakeasy-api/taskmaster/blob/main/static/openapi.yaml), enter the name of your API, and click **Continue**.
 
 ![Screenshot of the upload your OpenAPI spec dialog](/img/guides/build-mcp/create-taskmaster-mcp-server/upload-openapi-spec.png)
 
+### 2. Create a toolset
 
-### Step 2: Create a toolset
-
-Give your toolset a name (for example, "Taskmaster") and click **Continue**. 
+Give your toolset a name (for example, `Taskmaster`) and click **Continue**. 
 
 ![Screenshot of the create toolset dialog](/img/guides/build-mcp/create-taskmaster-mcp-server/create-toolset.png)
 
-Notice that the names of the tools that will be generated from your OpenAPI document are displayed in this dialog.
+Notice that this dialog also displays the names of the tools generated from your OpenAPI document.
 
-### Step 3: Configure MCP
+### 3. Configure MCP
 
 Enter a URL slug for the MCP server and click **Continue**.
 
 ![Screenshot of the configure MCP dialog](/img/guides/build-mcp/create-taskmaster-mcp-server/configure-slug.png)
 
-Gram will create the toolset from the OpenAPI document.
+Gram then creates the toolset from the OpenAPI document.
 
-Click **Toolsets** in the sidebar to view the Taskmaster toolset.
+Click **Toolsets** in the sidebar to view the **Taskmaster** toolset.
 
 ![Screenshot of the Gram dashboard showing the Taskmaster toolset](/img/guides/build-mcp/create-taskmaster-mcp-server/toolset-created.png)
 
-As you can see, our toolset needs environment variables before we can use it.
+As you can see, the toolset needs environment variables before you can use it.
 
 ## Getting a Taskmaster API key
 
 Before configuring environment variables, create an API key:
 
-1. Navigate to your Taskmaster app (for example `https://taskmaster-ritza.vercel.app`)
-2. Sign in and go to **Settings → Developer**
-3. Under **API Keys**, click **New Key**
-4. Give it a label and click **Create**
-5. Copy the API key. You will not be able to see it again
+- Navigate to your Taskmaster app (for example, `https://taskmaster-ritza.vercel.app`).
+- Sign in and go to **Settings → Developer**.
+- Under **API Keys**, click **New Key**.
+- Give it a label and click **Create**.
+- Copy the API key. You will not be able to see it again.
 
 <video width="600" controls>
   <source src="/videos/creating-api-key-taskmaster.mp4" type="video/mp4" />
@@ -89,17 +88,17 @@ Before configuring environment variables, create an API key:
 
 ## Configuring environment variables
 
-[Environments](/concepts/environments) store API keys and configuration separate from your toolset logic.
+[Environments](/concepts/environments) store API keys and configuration separately from your toolset logic.
 
-In the **Environments** tab, click the "Default" environment. Click the three dots in the top right corner of the environment card and then **Fill for Toolset**. Select the **Taskmaster** toolset and click **Fill Variables** to automatically populate the required variables.
+In the **Environments** tab, click the **Default** environment. Click the three-dot menu in the top-right corner of the environment card, and in the dropdown, click **Fill for Toolset**. Select the **Taskmaster** toolset and click **Fill Variables** to automatically populate the required variables.
 
 ![Screenshot showing the fill for toolset dialog to automatically populate required variables](/img/guides/build-mcp/create-taskmaster-mcp-server/fill-env-vars-toolset.png)
 
 Configure the following environment variables:
 
-1. Set the `TASKMASTER_SERVER_URL` environment variable to your API base URL, for example: `https://taskmaster-ritza.vercel.app/api`
-2. Set the `TASKMASTER_ACCESS_TOKEN` environment variable to your API key, for example `tm_abc123_def456`
-   - Alternatively, you can set an `X-API-Key` header to the same value. The API accepts both
+- Set the `TASKMASTER_SERVER_URL` environment variable to your API base URL. For example: `https://taskmaster-ritza.vercel.app/api`
+- Set the `TASKMASTER_ACCESS_TOKEN` environment variable to your API key. For example: `tm_abc123_def456`
+    Alternatively, you can set an `X-API-Key` header to the same value. The API accepts both.
 
 Click **Update** and then **Save**.
 
@@ -109,7 +108,7 @@ Click **Update** and then **Save**.
 
 Let's make the toolset available as an MCP server.
 
-Go to the **MCP** tab, find the Taskmaster toolset and click on it to open the MCP details page. 
+Go to the **MCP** tab, find the **Taskmaster** toolset, and click on it to open the MCP details page. 
 
 Scroll down to the **Visibility** section and tick the **Public** checkbox.
 
@@ -121,7 +120,7 @@ Scroll down to the **MCP Config** section and copy the **Public Server** configu
 
 ![Screenshot showing the MCP server config dialog for the Taskmaster toolset](/img/guides/build-mcp/create-taskmaster-mcp-server/copy-mcp-config.png)
 
-The configuration will look something like this:
+The configuration looks something like this:
 
 ```json
 {
@@ -143,7 +142,7 @@ The configuration will look something like this:
 
 Use the **Authenticated Server** configuration if you want to use the MCP server in a private environment.
 
-You'll need an API key to use an authenticated server. Generate an API key in the Taskmaster **Settings → Developer → API Keys** page and copy it to the `GRAM_KEY` environment variable in place of `<your-key-here>`.
+You need an API key to use an authenticated server. Generate an API key in the Taskmaster **Settings → Developer → API Keys** page, copy it, and paste it in the `GRAM_KEY` environment variable in place of `<your-key-here>`.
 
 The authenticated server configuration looks something like this:
 
@@ -170,7 +169,7 @@ The authenticated server configuration looks something like this:
 
 ## Testing the MCP server
 
-For testing your setup, you can use the Gram Playground to verify that your tools are working correctly before connecting to external clients.
+Before connecting to external clients, test your setup by using the **Gram Playground** to verify that your tools are working correctly.
 
 <video width="600" controls>
   <source src="/videos/taskmaster-playground.mp4" type="video/mp4" />
@@ -179,13 +178,13 @@ For testing your setup, you can use the Gram Playground to verify that your tool
 
 ## What's next
 
-Your Taskmaster MCP server is now ready to use with any MCP client. You can:
+Your Taskmaster MCP server is now ready to use with any MCP client. You can connect it to:
 
-- Connect it to [Claude Code](/clients/using-claude-code-with-gram-mcp-servers)
-- Connect it to [Claude Desktop](/clients/using-claude-desktop-with-gram-mcp-server)  
-- Connect it to [your IDE](/clients/using-your-ide-with-gram-mcp-server)
-- Connect it to [Cline](/clients/using-cline-with-gram-mcp-server)
-- Or any other MCP-compatible client
+- [Claude Code](/clients/using-claude-code-with-gram-mcp-servers)
+- [Claude Desktop](/clients/using-claude-desktop-with-gram-mcp-server)  
+- [Your IDE](/clients/using-your-ide-with-gram-mcp-server)
+- [Cline](/clients/using-cline-with-gram-mcp-server)
+- Any other MCP-compatible client
 
 
 
