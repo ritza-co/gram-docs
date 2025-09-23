@@ -41,6 +41,10 @@ A TXT record named `_gram.{your_sub_domain}` with the value `gram-domain-verify=
 
 Once both DNS records have been created, contact Gram to complete the domain linking process.
 
+:::tip[NOTE]
+You can contact Gram using the chat support widget at the bottom right of your [Gram dashboard](https://app.getgram.ai/).
+:::
+
 ## Setting up your MCP server
 
 In the [Gram dashboard](https://app.getgram.ai), go to **MCP** in the sidebar and select your MCP server. Click the **Enable** button at the top-right of the page to allow the server to receive requests. Under **Hosted URL** you should see your custom domain. Under **Visibility**  set the server to **Public**.
@@ -197,18 +201,18 @@ You should see your server metadata returned in the JSON response:
   "servers": [
     {
       "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-16/server.schema.json",
-      "name": "com.ritzademo/acme-todo",
+      "name": "com.yourcompany/todo",
       "description": "An MCP server for a simple todo list",
       "status": "active",
       "repository": {
-        "url": "https://github.com/ritza-co/acme-todo",
+        "url": "https://github.com/yourcompany/todo",
         "source": "github"
       },
       "version": "1.0.0",
       "remotes": [
         {
           "type": "streamable-http",
-          "url": "https://mcp.ritzademo.com/mcp/ritza-rzx-our91"
+          "url": "https://mcp.yourcompany.com/mcp/rzx-our91"
         }
       ],
       "_meta": {
