@@ -23,7 +23,7 @@ We'll do remote deployment in this guide.
 
 You'll need:
 
-- A [Gram Pro or Enterprise account](https://app.getgram.ai) - you need a custom domain to publish your MCP server to the registry.
+- A [Gram Pro or Enterprise account](https://www.speakeasy.com/pricing?product=mcp) - you need a custom domain to publish your MCP server to the registry.
 - A hosted Gram MCP server. If you don't have one, you can learn how to create one in our [quickstart guide](/gram-quickstart).
 - Domain management access (for DNS TXT record configuration) for a custom domain.
 - A GitHub repository for your MCP server source code.
@@ -58,7 +58,7 @@ The MCP Registry uses an official CLI tool for publishing servers. The recommend
 ```bash
 brew install mcp-publisher
 ```
-## Create a MCP publisher server configuration file
+## Create an MCP publisher server configuration file
 
 Navigate to the local directory of your MCP server's API. Make sure the Open API document is present in the root directory and then create a template `server.json` file using the MCP publisher CLI:
 
@@ -102,7 +102,7 @@ For remote deployment, you need to add the `remotes` field to the `server.json` 
 ]
 ```
 
-The `url` field is the URL of your MCP server. The `type` field is the transport protocol to use. The `authentication` field is the authentication method to use, which can be `sse` (Server-Sent Events) or `streamable-http`. The optional `header` field configures the headers that clients should send to when connecting to the MCP server, which includes the API key in this case.
+The `url` field is the URL of your MCP server. The `type` field is the transport protocol to use, which can be `sse` (Server-Sent Events) or `streamable-http`. The `authentication` field is the authentication method to use. The optional `header` field configures the headers that clients should send to when connecting to the MCP server, which includes the API key in this case.
 
 ## DNS authentication for your custom domain
 
@@ -122,7 +122,7 @@ echo "yourdomain.com. IN TXT \"v=MCPv1; k=ed25519; p=$(openssl pkey -in key.pem 
 
 This command extracts the public key from your private key file, encodes it in base64 format, and formats it as a DNS TXT record for MCP Registry verification. 
 
-The output shows what you need to add to add to your domain's DNS configuration. For example:
+The output shows what you need to add to your domain's DNS configuration. For example:
 
 ``` 
 yourcompany.com. IN TXT "v=MCPv1; k=ed25519; p=qC5H12wereF434F1aSHdYsRPGruUhY0="
