@@ -25,7 +25,7 @@ To follow the tutorial, you need:
 
 - **A [Gram Pro or Enterprise account](https://www.speakeasy.com/pricing?product=mcp):** You need a custom domain to publish your MCP server to the registry.
 - **A Gram-hosted MCP server:** If you don't have one, learn to create one in our [quickstart guide](/gram-quickstart).
-- **Domain management access for a custom domain:** You need to configure your DNS TXT record.
+- **Domain management access for a custom domain:** You need to create a DNS TXT record.
 - **A GitHub repository:** This is where you need to store your MCP server source code.
 
 ## Create a custom MCP server domain
