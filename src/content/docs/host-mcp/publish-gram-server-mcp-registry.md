@@ -5,49 +5,55 @@ sidebar:
   order: 8
 ---
 
-The official [Model Context Protocol (MCP) Registry](https://registry.modelcontextprotocol.io/) is an open catalog and API for publicly available MCP servers. It's like an app store for MCP servers -  it provides MCP clients with a list of MCP servers. By publishing your Gram-hosted MCP server to the registry, you make it discoverable. 
+The official [Model Context Protocol (MCP) Registry](https://registry.modelcontextprotocol.io/) is an open catalog and API for publicly available MCP servers. It's like an app store for MCP servers – it provides MCP clients with a list of MCP servers. By publishing your Gram-hosted MCP server to the registry, you make it discoverable. 
 
-The registry is owned by the MCP open-source community and backed by major trusted contributors to the MCP ecosystem such as Anthropic, GitHub, and Microsoft.
+The registry is owned by the MCP open-source community and backed by major trusted contributors to the MCP ecosystem, such as Anthropic, GitHub, and Microsoft.
 
-This guide will show you how to prepare your Gram MCP server and publish it to the MCP Registry. You'll learn how to configure your server details, handle DNS authentication, and verify your publication. 
+This guide shows you how to prepare your Gram MCP server and publish it to the MCP Registry. You'll learn how to configure your server details, handle DNS authentication, and verify your publication. 
 
-To publish your MCP server to the MCP registry, you need to make your MCP server available, which you can do using:
+To publish your MCP server to the MCP registry, you need to make your MCP server available using one of the following three methods:
 
-- Package deployment: Publish your MCP server as a package, for example an npm package, which can be run locally by MCP clients.
-- Remote deployment: Host your MCP server as a web service that clients connect to.
-- Hybrid deployment: Offer both package and remote deployment options.
+- **Package deployment:** Publish your MCP server as a package, such as an npm package, which can be run locally by MCP clients.
+- **Remote deployment:** Host your MCP server as a web service that clients connect to.
+- **Hybrid deployment:** Offer both a package and a remote deployment option.
 
-We'll do remote deployment in this guide.
+This guide uses remote deployment.
 
 ## Prerequisites
 
-You'll need:
+To follow the tutorial, you need:
 
-- A [Gram Pro or Enterprise account](https://www.speakeasy.com/pricing?product=mcp) - you need a custom domain to publish your MCP server to the registry.
-- A hosted Gram MCP server. If you don't have one, you can learn how to create one in our [quickstart guide](/gram-quickstart).
-- Domain management access (for DNS TXT record configuration) for a custom domain.
-- A GitHub repository for your MCP server source code.
+- **A [Gram Pro or Enterprise account](https://www.speakeasy.com/pricing?product=mcp):** You need a custom domain to publish your MCP server to the registry.
+- **A Gram-hosted MCP server:** If you don't have one, learn to create one in our [quickstart guide](/gram-quickstart).
+- **Domain management access for a custom domain:** You need to configure your DNS TXT record.
+- **A GitHub repository:** This is where you need to store your MCP server source code.
 
-## Creating a custom MCP server domain
+## Create a custom MCP server domain
 
 MCP servers can be hosted through a custom subdomain such as `{your_sub_domain}/mcp`.
 
 Contact Gram support to enable a custom subdomain for your account, then go to **Settings** in the Gram dashboard to complete the setup.
 
-You’ll need to create two DNS entries:
+Create two DNS entries:
 
-A CNAME record pointing to `cname.getgram.ai`.
-A TXT record named `_gram.{your_sub_domain}` with the value `gram-domain-verify={your_sub_domain},{gram_organization_id}`.
+- A CNAME record pointing to `cname.getgram.ai`
+- A TXT record named `_gram.{your_sub_domain}` with the value `gram-domain-verify={your_sub_domain},{gram_organization_id}`
 
-Once both DNS records have been created, contact Gram to complete the domain linking process.
+Once you've created both DNS records, contact Gram to complete the domain linking process.
 
 :::tip[NOTE]
 You can contact Gram using the chat support widget at the bottom right of your [Gram dashboard](https://app.getgram.ai/).
 :::
 
-## Setting up your MCP server
+## Set up your MCP server
 
-In the [Gram dashboard](https://app.getgram.ai), go to **MCP** in the sidebar and select your MCP server. Click the **Enable** button at the top-right of the page to allow the server to receive requests. Under **Hosted URL** you should see your custom domain. Under **Visibility**  set the server to **Public**.
+In the [Gram dashboard](https://app.getgram.ai), go to **MCP** in the sidebar and select your MCP server.
+
+Click the **Enable** button at the top right of the page to allow the server to receive requests. 
+
+Under **Hosted URL**, you should see your custom domain.
+
+Under **Visibility**, set the server to **Public**.
 
 ![GramMCP server details page](/img/guides/publish-gram-server-mcp-registry/mcp-details.png)
 
@@ -60,7 +66,7 @@ brew install mcp-publisher
 ```
 ## Create an MCP publisher server configuration file
 
-Navigate to the local directory of your MCP server's API. Make sure the Open API document is present in the root directory and then create a template `server.json` file using the MCP publisher CLI:
+Navigate to the local directory of your MCP server's API. Make sure the Open API document is present in the root directory, then create a template `server.json` file using the MCP publisher CLI:
 
 ```bash
 mcp-publisher init
@@ -84,8 +90,7 @@ This creates a `server.json` file in your repository with auto-detected server d
 }
 ```
 
-The name field determines authentication requirements. The
-`com.yourcompany/*` format requires DNS or HTTP domain verification.
+The name field determines authentication requirements. The `com.yourcompany/*` format requires DNS or HTTP domain verification.
 
 For remote deployment, you need to add the `remotes` field to the `server.json` file:
 
@@ -102,13 +107,18 @@ For remote deployment, you need to add the `remotes` field to the `server.json` 
 ]
 ```
 
-The `url` field is the URL of your MCP server. The `type` field is the transport protocol to use, which can be `sse` (Server-Sent Events) or `streamable-http`. The `authentication` field is the authentication method to use. The optional `header` field configures the headers that clients should send to when connecting to the MCP server, which includes the API key in this case.
+In this code:
 
-## DNS authentication for your custom domain
+- The `url` field is the URL of your MCP server.
+- The `type` field specifies the transport protocol, which can be either `sse` (server-sent events) or `streamable-http`.
+- The `authentication` field specifies the authentication method.
+- The optional `header` field configures the headers that clients should send to when connecting to the MCP server, which in this case includes the API key.
+
+## Verify your custom domain with DNS authentication
 
 You need to verify that you own the domain before you can publish your MCP server to the MCP Registry.
 
-First, in your server's local directory, create a private key for authentication:
+First, create a private key for authentication in your server's local directory:
 
 ```bash
 openssl genpkey -algorithm Ed25519 -out key.pem
@@ -120,7 +130,7 @@ Next, get the public key for the DNS record:
 echo "yourdomain.com. IN TXT \"v=MCPv1; k=ed25519; p=$(openssl pkey -in key.pem -pubout -outform DER | tail -c 32 | base64)\""
 ```
 
-This command extracts the public key from your private key file, encodes it in base64 format, and formats it as a DNS TXT record for MCP Registry verification. 
+This command extracts the public key from your private key file, encodes it in Base64 format, and formats it as a DNS TXT record for MCP Registry verification. 
 
 The output shows what you need to add to your domain's DNS configuration. For example:
 
@@ -128,29 +138,28 @@ The output shows what you need to add to your domain's DNS configuration. For ex
 yourcompany.com. IN TXT "v=MCPv1; k=ed25519; p=qC5H12wereF434F1aSHdYsRPGruUhY0="
 ```
 
-Copy the value in parentheses.
+Copy the value in quotation marks.
 
 ### Add the DNS TXT record
 
-In your domain registrar's DNS management interface do the following:
+In your domain registrar's DNS management interface, do the following:
 
-1. Create a new TXT record.
-2. Set the host/name to your root domain using the `@` symbol.
-3. Set the value to the output you copied from the previous command.
-4. Save the record and wait for DNS propagation (usually 5-15 minutes).
+- Create a new TXT record.
+- Set the host/name to your root domain using the `@` symbol.
+- Set the value to the output you copied from the previous command.
+- Save the record and wait for DNS propagation (usually between five and 15 minutes).
 
-You can check the status of the DNS propagation using the Linux `dig` command and searching for the TXT record value:
+You can check the status of the DNS propagation by using the Linux `dig` command and searching for the TXT record value:
 
 ```bash
 dig TXT yourcompany.com | grep "v=MCPv1; k=ed25519; p=qC5H12wereF434F1aSHdYsRPGruUhY0="
 ```
 
-When checking DNS propagation for your newly added TXT record, you'll initially see `status: NXDOMAIN` in your `dig` output, which means that the DNS resolver cannot find the domain or the specific record type you're querying. Once DNS propagation is complete, the status will change to `status: NOERROR`.
+When checking DNS propagation for your newly added TXT record, you initially see `status: NXDOMAIN` in your `dig` output, which means that the DNS resolver cannot find the domain or the specific record type you're querying. Once DNS propagation is complete, the status changes to `status: NOERROR`.
 
 In [namecheap](https://www.namecheap.com/), a popular domain hosting provider, you can add a new TXT record in the **Advanced DNS** settings page:
 
 ![Namecheap - adding a DNS TXT record](/img/guides/publish-gram-server-mcp-registry/adding-dns-record.png)
-
 
 ### Authenticate with the registry
 
@@ -164,7 +173,7 @@ This command authenticates you with the MCP Registry by extracting the private k
 
 ## Publish your server to the MCP Registry
 
-Before publishing, ensure that you don't commit sensitive files to your repository such as the private key:
+Before publishing, ensure that you don't commit sensitive files, such as the private key, to your repository:
 
 ```bash
 # Remove the private key
@@ -188,7 +197,7 @@ You should see the following output:
 
 ## Verify your publication
 
-Check that your server appears in the registry by searching for it using the `curl` command with your MCP server name:
+To check that your server appears in the registry, search for it using the `curl` command with your MCP server name:
 
 ```bash
 curl "https://registry.modelcontextprotocol.io/v0/servers?search=com.yourcompany/todo"
@@ -236,8 +245,8 @@ Your MCP server can now be discovered and installed by MCP clients.
 
 ## Next steps
 
-Your Gram MCP server is now published on the official MCP Registry, making it discoverable to developers worldwide.
-To maintain and further improve your MCP server you can:
+You have now published your Gram MCP server on the official MCP Registry, making it discoverable to developers worldwide.
+To maintain and further improve your MCP server, you can:
 
 - Automate publishing with [GitHub Actions workflows](https://github.com/modelcontextprotocol/registry/blob/main/docs/guides/publishing/github-actions.md)
-- Refine tool definitions and use [tool variations](/concepts/tool-variations) to help LLMs better understand and invoke them accurately.
+- Refine tool definitions and use [tool variations](/concepts/tool-variations) to help LLMs better understand and invoke them accurately
