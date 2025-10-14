@@ -1,83 +1,91 @@
 ---
-title: "Using Factory CLI (droid) with Gram-hosted MCP servers"
+title: "Using the Factory CLI with Gram-hosted MCP servers"
 description: "Learn how to connect Factory CLI to Gram-hosted MCP servers, enabling AI agents to access your APIs and tools directly from your terminal."
 sidebar:
   order: 9
 ---
 
-[Factory CLI (droid)](https://docs.factory.ai/cli) is an AI-powered development tool that helps automate coding tasks and workflows directly from your terminal. It provides an interactive AI assistant that can work with your codebase and tools.
+The Factory CLI [`droid`](https://docs.factory.ai/cli) is an AI-powered development tool for automating coding tasks and workflows directly from your terminal. It provides an interactive AI assistant that can work with your codebase and tools.
 
-When combined with [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) servers, Factory CLI becomes even more powerful. Using MCP servers, you can give Factory CLI agents access to your tools and infrastructure, allowing them to work with your APIs, databases, and other services.
+When combined with [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) servers, `droid` becomes even more powerful. Using MCP servers, you can give `droid` agents access to your tools and infrastructure, allowing them to work with your APIs, databases, and other services.
 
-This guide shows you how to connect Factory CLI to a [Gram-hosted MCP server](/gram-quickstart) using Taskmaster, a full-stack CRUD application for task and project management. Taskmaster includes a web UI for managing projects and tasks, built-in HTTP API, OAuth 2.0 authentication, and a Neon PostgreSQL database for storing data. Try the [demo app](https://taskmaster-speakeasyapi.vercel.app/) to see it in action.
+This guide demonstrates how to connect `droid` to a [Gram-hosted MCP server](/gram-quickstart) using Taskmaster, a full-stack CRUD application for task and project management. Taskmaster includes a web UI for managing projects and tasks, a built-in HTTP API, OAuth 2.0 authentication, and a Neon PostgreSQL database for storing data. Try the [demo app](https://taskmaster-speakeasyapi.vercel.app/) to see it in action.
 
-You'll learn how to set up the connection, test it, and use natural language to manage tasks, projects, and workflows through Factory CLI.
+You'll learn how to set up the connection, test it, and use natural language to manage tasks, projects, and workflows via `droid`.
 
 Find the full code and OpenAPI document in the [Taskmaster repository](https://github.com/speakeasy-api/taskmaster).
 
-## Creating an MCP server
-
-Before connecting Factory CLI to a Taskmaster MCP server, you first need to create one. Follow our guide to [creating a Taskmaster MCP server](/examples/creating-taskmaster-mcp-server).
-
 ## Prerequisites
 
+To follow this tutorial, you need:
+
 - A [Gram account](https://app.getgram.ai)
-- [Factory CLI (droid)](https://docs.factory.ai/cli) installed
+- The Factory CLI [`droid`](https://docs.factory.ai/cli) installed on your machine
 - A project directory to work in
 
 ## Setup
 
-First, verify that Factory CLI is installed correctly:
+First, verify that `droid` has been installed correctly:
 
 ```bash
 droid --version
 ```
 
-If installation is successful, you'll see the Factory CLI version number.
+If installation was successful, you'll see the `droid` version number.
 
-## Connecting to your Gram-hosted MCP server
+## Creating an MCP server
 
-Factory CLI supports two types of MCP server connections: **stdio** (for local processes) and **HTTP** (for remote endpoints). Gram-hosted MCP servers use the HTTP method for direct connections.
+Before connecting `droid` to a Taskmaster MCP server, you first need to create one. Follow our guide to [creating a Taskmaster MCP server](/examples/creating-taskmaster-mcp-server).
 
-To add an MCP server in Factory CLI, start a `droid` session and use the `/mcp add` command.
+## Connecting droid to your Gram-hosted MCP server
 
-### Pass-through Authentication
+The Factory CLI supports two types of MCP server connections:
 
-If you're using the **Pass-through Authentication** configuration:
+- **stdio** for local processes
+- **HTTP** for remote endpoints
 
-1. Start Factory CLI in your project directory:
+Gram-hosted MCP servers like the Taskmaster server use the HTTP method for direct connections.
+
+To add an MCP server, you first need to start a `droid` session in your project directory:
+
 ```bash
 droid
 ```
 
-2. Add the MCP server using the `/mcp add` command (replace `<your-api-key>` with your Taskmaster API key and `your-taskmaster-slug` with your MCP server slug):
+Then you need to use the `/mcp add` command. How you configure this command depends on the type of authentication your Taskmaster MCP server uses.
+
+### Pass-through authentication
+
+If you're using the **Pass-through Authentication** configuration, run the following command (replace `<your-api-key>` with your Taskmaster API key and `your-taskmaster-slug` with your MCP server slug):
 
 ```
 /mcp add --type http taskmaster https://app.getgram.ai/mcp/your-taskmaster-slug -H "MCP-TASKMASTER-API-KEY: <your-api-key>"
 ```
 
 This command:
+
 - Creates an MCP server configuration named `taskmaster`
 - Uses HTTP transport to connect directly to the Gram-hosted MCP server
 - Passes the Taskmaster API key as a header
 
-### Managed Authentication
+### Managed authentication
 
-If you're using the **Managed Authentication** configuration, replace `<your-gram-api-key>` with your actual Gram API key and `your-taskmaster-slug` with your MCP server slug:
+If you're using the **Managed Authentication** configuration, run the following command (replace `<your-gram-api-key>` with your actual Gram API key and `your-taskmaster-slug` with your MCP server slug):
 
 ```
 /mcp add --type http taskmaster https://app.getgram.ai/mcp/your-taskmaster-slug -H "Gram-Environment: default" -H "Authorization: Bearer <your-gram-api-key>"
 ```
 
 This command:
+
 - Creates an MCP server configuration named `taskmaster`
 - Uses HTTP transport to connect directly to the Gram-hosted MCP server
 - Uses the default Gram environment (change `default` to your environment name if needed)
 - Passes the Gram API key in the Authorization header
 
-### Verifying the connection
+## Verifying the connection
 
-Check that the server was added successfully by running:
+Check that you've added the server successfully by running:
 
 ```
 /mcp list
@@ -85,17 +93,19 @@ Check that the server was added successfully by running:
 
 You should see `taskmaster` in the list of configured servers.
 
-To see the full configuration details:
+To see the full configuration details, run the following command:
 
 ```
 /mcp get taskmaster
 ```
 
-This will display the server type, URL, headers, and other configuration details.
+This displays the server type, URL, headers, and other configuration details.
 
 ## Testing the setup
 
-Now test the connection by asking Factory CLI to use your MCP tools. In the same `droid` session, ask the AI agent to create a new task:
+Now test the connection by asking `droid` to use your MCP tools.
+
+Then, in the same `droid` session, ask the AI agent to create a new task:
 
 ```
 Create a new task called "Implement rate limiting" with description "Add rate limiting to the app"
@@ -106,94 +116,80 @@ Create a new task called "Implement rate limiting" with description "Add rate li
     Your browser does not support the video tag.
 </video>
 
-Factory CLI will discover and use the `createTask` tool from your Gram MCP server to create the task through the Taskmaster API.
+The Factory CLI will discover and use the `createTask` tool from your Gram MCP server to create the task through the Taskmaster API.
 
 ## Managing MCP servers
 
-Factory CLI provides several `/mcp` slash commands to manage your MCP server configurations from within a `droid` session:
+The Factory CLI provides several `/mcp` slash commands for managing your MCP server configurations from within a `droid` session:
 
-### List all servers
-
-```
-/mcp list
-```
-
-Shows all configured MCP servers with their basic information.
-
-### View server details
-
-```
-/mcp get taskmaster
-```
-
-Displays the full configuration for a specific server.
-
-### Remove a server
-
-```
-/mcp remove taskmaster
-```
-
-Removes the server configuration from Factory CLI.
+- `/mcp list` shows all configured MCP servers with their basic information.
+- `/mcp get taskmaster` displays the full configuration for a specific server.
+- `/mcp remove taskmaster` removes the Taskmaster MCP server configuration from `droid`.
 
 ## Troubleshooting
 
+Let's go through some common issues and how to fix them.
+
 ### Server not found
 
-If Factory CLI can't find your server:
+If `droid` can't find your server:
 
-```
-# Check if the server is listed
-/mcp list
+- Check whether the server is listed.
 
-# Remove and re-add the server
-/mcp remove taskmaster
-/mcp add --type http taskmaster https://app.getgram.ai/mcp/your-taskmaster-slug -H "MCP-TASKMASTER-API-KEY: <your-api-key>"
-```
+  ```
+  /mcp list
+  ```
+
+- Then remove and re-add the server.
+
+  ```
+  /mcp remove taskmaster
+  /mcp add --type http taskmaster https://app.getgram.ai/mcp/your-taskmaster-slug -H "MCP-TASKMASTER-API-KEY: <your-api-key>"
+  ```
 
 ### Authentication errors
 
-If you get authentication errors:
+If you encounter authentication errors:
 
-- Verify your Gram API key in the dashboard under **Settings -> API Keys**.
-- For Managed Authentication, check that the `Authorization` header is correctly formatted in the `/mcp add` command.
-- For Pass-through Authentication, ensure your Taskmaster API key is correct.
+- Verify your Gram API key in the Gram dashboard under **Settings → API Keys**.
+- For managed authentication, check that the `Authorization` header is correctly formatted in the `/mcp add` command.
+- For pass-through authentication, ensure your Taskmaster API key is correct.
 - Verify that the Taskmaster API base URL is accessible.
 
 ### Configuration format issues
 
-If you're having issues with environment variables or headers:
+If you have issues with environment variables or headers:
 
-- For HTTP servers, use `-H "Key: Value"` format (note the colon and space).
-- For stdio servers, use `-e KEY=VALUE` format.
-- Ensure headers and environment variables are properly formatted without extra quotes.
+- For HTTP servers, use the `-H "Key: Value"` format (note the colon and space).
+- For stdio servers, use the `-e KEY=VALUE` format.
+- Ensure the headers and environment variables are properly formatted without extra quotes.
 
 ### Tool calls not working
 
-If Factory CLI isn't calling the tools:
+If `droid` isn't calling the tools:
 
-- Test the MCP server in the **Gram Playground** first to ensure it's working correctly.
+- First, test the MCP server in the **Gram Playground** to ensure it's working correctly.
 - Check that the toolset includes the tools you want to use.
-- Verify the environment is correctly configured with the required variables in Gram.
-- Use `/mcp get taskmaster` to verify the server configuration is correct.
+- Verify that the environment has been correctly configured with the required variables in Gram.
+- Use `/mcp get taskmaster` to confirm that the server configuration is correct in `droid`.
 
 ### Tools not appearing
 
 If the tools aren't available:
 
-- Test the MCP server in the **Gram Playground** first to ensure it's working.
+- First, test the MCP server in the **Gram Playground** to ensure it's working.
 - Check that the toolset includes the tools you want to use.
-- Verify the environment is correctly configured in Gram.
-- Run `/mcp list` to confirm the server is loaded.
+- Verify that the environment has been correctly configured in Gram.
+- Run `/mcp list` to confirm that you've loaded the server in `droid`.
 
 ## What's next
 
-You now have Factory CLI connected to a Gram-hosted MCP server, enabling AI agents to interact with your APIs and tools directly from your terminal.
+You have now connected the Factory CLI `droid` to a Gram-hosted MCP server, enabling AI agents to interact with your APIs and tools directly from your terminal.
 
-Here are some next steps to explore:
+You can further enhance your AI integrations by:
 
-- **Create custom toolsets:** Group related tools together in Gram to build structured workflows for specific use cases.
-- **Add more APIs:** Connect additional APIs to Gram and make them available through MCP servers.
-- **Explore Factory CLI features:** Learn more about Factory CLI's capabilities in their [official documentation](https://docs.factory.ai/cli).
+- **Creating custom toolsets:** Group related tools together in Gram to build structured workflows for specific use cases.
+- **Adding more APIs:** Connect additional APIs to Gram and make them available through MCP servers.
+- **Exploring the `droid` features:** Learn more about the Factory CLI's capabilities in the [official documentation](https://docs.factory.ai/cli).
 
 Ready to build your own MCP server? [Try Gram today](https://getgram.ai) and see how easy it is to turn any API into agent-ready tools.
