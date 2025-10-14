@@ -17,19 +17,21 @@ Find the full code and OpenAPI document in the [Taskmaster repository](https://g
 
 ## Prerequisites
 
+To follow this tutorial, you need:
+
 - A [Gram account](https://app.getgram.ai)
-- The Factory CLI [`droid`](https://docs.factory.ai/cli) installed
+- The Factory CLI [`droid`](https://docs.factory.ai/cli) installed on your machine
 - A project directory to work in
 
 ## Setup
 
-First, verify that `droid` is installed correctly:
+First, verify that `droid` has been installed correctly:
 
 ```bash
 droid --version
 ```
 
-If installation is successful, you'll see the `droid` version number.
+If installation was successful, you'll see the `droid` version number.
 
 ## Creating an MCP server
 
@@ -44,17 +46,17 @@ The Factory CLI supports two types of MCP server connections:
 
 Gram-hosted MCP servers like the Taskmaster server use the HTTP method for direct connections.
 
-To add an MCP server, you need to start a `droid` session and use the `/mcp add` command. How you configure this command depends on the type of authentication your Taskmaster MCP server uses.
-
-### Pass-through authentication
-
-If you're using the **Pass-through Authentication** configuration, start `droid` in your project directory:
+To add an MCP server, you first need to start a `droid` session in your project directory:
 
 ```bash
 droid
 ```
 
-Then, add the MCP server using the `/mcp add` command (replace `<your-api-key>` with your Taskmaster API key and `your-taskmaster-slug` with your MCP server slug):
+Then you need to use the `/mcp add` command. How you configure this command depends on the type of authentication your Taskmaster MCP server uses.
+
+### Pass-through authentication
+
+If you're using the **Pass-through Authentication** configuration, run the following command (replace `<your-api-key>` with your Taskmaster API key and `your-taskmaster-slug` with your MCP server slug):
 
 ```
 /mcp add --type http taskmaster https://app.getgram.ai/mcp/your-taskmaster-slug -H "MCP-TASKMASTER-API-KEY: <your-api-key>"
