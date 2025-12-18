@@ -15,7 +15,7 @@ This guide shows you how to build and deploy an MCP server using xmcp (a TypeScr
 
 Key features:
 
-- **File-System Based Architecture**: Place tools in `tools/`, resources in `resources/`, and xmcp discovers and registers them automatically—no manual configuration
+- **File-System Based Architecture with auto-discovery**: Place tools in `tools/`, resources in `resources/`, and xmcp auto-discovers and registers them
 - **Hot Reloading**: Changes appear immediately during development
 - **Type Safety**: Full TypeScript support with type inference from Zod schemas
 - **Flexible Deployment**: Built-in adapters for Next.js, Express, Vercel, and serverless platforms
@@ -90,9 +90,6 @@ export default async function photoResource(uri: URL) {
 
 [Middlewares](https://xmcp.dev/docs/core-concepts/middlewares) are processing layers for handling authentication, logging, rate limiting, and other cross-cutting concerns.
 
-### Auto-Discovery
-
-One of XMCP's most powerful features is its file-system-based auto-discovery. You can place the tools in a `tools/` directory, resources in `resources/`, and prompts in `prompts/`, and xmcp automatically registers them. No manual configuration needed.
 
 ## What is Gram?
 
@@ -113,7 +110,7 @@ Gram supports two approaches for creating MCP servers:
 
 xmcp handles MCP protocol complexity while Gram handles infrastructure and deployment. Together, they let you build and ship production-ready MCP servers without protocol boilerplate or DevOps work.
 
-![xmcp and Gram architecture](./assets/xmcp-gram-architecture.png)
+![xmcp and Gram architecture](/img/guides/xmcp/xmcp-gram-architecture.png)
 
 ## Building an MCP server with xmcp and Gram
 
@@ -123,10 +120,10 @@ You'll build an MCP server with an email-sending tool and an email list resource
 
 You'll need:
 
-- A Gram account
+- A [Gram account](https://getgram.ai)
 - Node.js installed
 - Basic TypeScript knowledge
-- A Resend account (for the email API)
+- A [Resend account](https://resend.com/) (for the email API)
 
 ## Project setup
 
@@ -138,17 +135,16 @@ pnpm create @gram-ai/function@latest --template gram
 
 Answer the prompts:
 
-- What do you want to call your project? -> x-gram
-- What directory should we create the project in? -> x-gram
-- Initialize a git repository? -> Yes
-- Install dependencies with pnpm? -> Yes
+- What do you want to call your project? -> `x-gram`
+- What directory should we create the project in? -> `x-gram`
+- Initialize a git repository? -> `Yes`
+- Install dependencies with pnpm? -> `Yes`
+- Install the Gram CLI? Required to deploy tools to Gram. -> `Yes`
 
 This creates a Node.js project with the following structure:
 
 ```txt
 .
-├── gram.config.ts
-├── gram.deploy.json
 ├── package.json
 ├── pnpm-lock.yaml
 ├── README.md
@@ -161,14 +157,16 @@ This creates a Node.js project with the following structure:
 Install `xmcp` and dependencies:
 
 ```bash
-pnpm i xmcp zod resend
+pnpm i xmcp@^0.5.4 zod@^3 resend@^6.6.0 
 ```
 
 ### Adding the send email tool
 
-In the tools directory, create a file `src/tools/send_email.ts`.
+Create a `tools` directory within `src`. In the tools directory, create a file `src/tools/send_email.ts`.
 
-```ts
+```ts 
+// src/tools/send_email.ts
+
 import { z } from "zod";
 import { type InferSchema } from "xmcp";
 import { Resend } from "resend";
@@ -236,15 +234,17 @@ The tool has three components:
 - **metadata** - The tool's name and description for AI agents
 - **handler** - The async function implementing the tool's logic
 
-The tool reads `RESEND_API_KEY` from environment variables (Gram injects these securely at runtime) and validates inputs with the Zod schema. It returns error objects instead of throwing because MCP tools must return valid responses with errors communicated through the response structure. The `success` boolean lets AI agents check if the operation succeeded.
+The tool reads the  `RESEND_API_KEY` from environment variables (Gram injects environment variables securely at runtime) and validates inputs with the Zod schema. The tool returns error objects instead of throwing because MCP tools must return valid responses with errors communicated through the response structure. The `success` boolean lets AI agents check if the operation succeeded.
 
 `InferSchema<typeof schema>` extracts TypeScript types from the Zod schema, giving the application full type safety.
 
 ### Registering the tool
 
-Inside the `src/gram.ts` file, register the tool we created.
+Inside the `src/gram.ts` file, register the tool we created. Replace the existing code.
 
-```ts
+```ts 
+// src/gram.ts
+
 import { withGram } from "@gram-ai/functions/mcp";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
@@ -299,11 +299,11 @@ export default withGram(server, {
 });
 ```
 
-The `withGram()` wrapper transforms the MCP server into a serverless function that Gram deploys. It handles HTTP-to-MCP protocol conversion, authentication, and observability. When you run `pnpm build`, Gram bundles `gram.ts` as the entry point. When you run `pnpm push`, Gram deploys this bundle to their infrastructure.
+The `withGram()` wrapper transforms the MCP server into a serverless function that Gram deploys. It handles HTTP-to-MCP protocol conversion, authentication, and observability. When you run `pnpm build`, Gram bundles `gram.ts` as the entry point. When you run `pnpm push`, Gram deploys this bundle.
 
 ## Running the MCP server locally
 
-Because we wrapped the Gram server in `withGram`, we need to modify the `src/server.ts` file, which is the server that can run locally.
+Because we wrapped the Gram server in the `withGram` function, we need to modify the `src/server.ts` file, which is the server that can run locally. Replace the existing code.
 
 ```ts
 // src/server.ts
@@ -337,7 +337,7 @@ pnpm dev
 
 You should be redirected to the MCP Inspector in your default browser.
 
-![MCP Inspector](./assets/mcp-inspector.png)
+![MCP Inspector](/img/guides/xmcp/mcp-inspector.png)
 
 ## Building and deploying
 
@@ -353,17 +353,17 @@ Once it's done, run the following command to deploy to Gram.
 pnpm push
 ```
 
-After deployment completes, you'll see a new source called `x-gram` on the **HOME → TOOLSETS** page.
+After deployment completes, you'll see a new source called `x-gram` on the **Toolsets** page.
 
-![Deployed source on Gram](./assets/gram-deployed-source.png)
+![Deployed source on Gram](/img/guides/xmcp/gram-deployed-source.png)
 
 ### Creating a toolset
 
-Click **+ ADD TOOLSET**, name it `x-gram`, and confirm. This creates an empty toolset.
+Click **+ CREATE A TOOLSET**, name it `x-gram`, and confirm. This creates an empty toolset.
 
-Click **ADD TOOLS** and select the `send_email` tool from the `xmcp-gram` source.
+Click **ADD TOOLS** and select the `send_email` tool from the `x-gram` toolset.
 
-![Adding tools to toolset](./assets/gram-add-tools.png)
+![Adding tools to toolset](/img/guides/xmcp/gram-add-tools.png)
 
 ### Configuring authentication
 
@@ -377,12 +377,13 @@ Navigate to the **Auth** tab and add the Resend API key into an environment and 
 Open the **Playground**, select the `x-gram` toolset and the environment where you added the API key. Enter a prompt like:
 
 ```txt
-Send a merry christmas email to yourtestemail@mail.com
+Send a merry christmas email to yourtestemail@example.com
 ```
 
-![Testing in playground](./assets/gram-playground-test.png)
-
 The tool executes and sends the email.
+
+![Testing in playground](/img/guides/xmcp/gram-playground-test.png)
+
 
 ## Adding resources
 
@@ -390,7 +391,9 @@ While tools perform actions, resources provide data. They're read-only sources t
 
 Resources follow the same pattern as tools. Create `src/resources/emails.ts`:
 
-```typescript
+```ts
+// src/resources/emails.ts
+
 import { type ResourceMetadata } from "xmcp";
 
 export const metadata: ResourceMetadata = {
@@ -432,6 +435,8 @@ The handler receives a `URL` parameter for parameterized resources. You can chec
 Open `src/gram.ts` and add the resource import and registration:
 
 ```ts
+// src/gram.ts
+
 import emailsResourceHandler, { metadata as emailsMetadata } from "./resources/emails.ts";
 // ... existing imports
 
@@ -464,7 +469,7 @@ pnpm push
 
 The resource will appear in the **Toolset → Resources** tab, ready to add to the toolset.
 
-![Resources tab](./assets/gram-resources-tab.png)
+![Resources tab](/img/guides/xmcp/gram-resources-tab.png)
 
 ## Conclusion
 
@@ -472,7 +477,7 @@ By combining xmcp's protocol abstraction with Gram's deployment infrastructure, 
 
 xmcp handles the protocol complexity with file-system based auto-discovery, type safety, and hot reloading. Gram handles the operational complexity with serverless scaling, enterprise security, and observability.
 
-You now have a working MCP server with an email-sending tool and email list resource deployed to production. You can extend it by adding more tools in `src/tools/` or resources in `src/resources/`, xmcp will discover and register them automatically
+You now have a working MCP server with an email-sending tool and email list resource deployed to production. You can extend it by adding more tools in `src/tools/` or resources in `src/resources/`.
 
 ## Further reading
 
