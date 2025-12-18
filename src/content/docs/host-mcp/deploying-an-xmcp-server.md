@@ -289,6 +289,8 @@ server.registerTool(
   }
 );
 
+export { server };
+
 // Wrap with Gram Functions
 export default withGram(server, {
   variables: {
@@ -298,6 +300,44 @@ export default withGram(server, {
 ```
 
 The `withGram()` wrapper transforms the MCP server into a serverless function that Gram deploys. It handles HTTP-to-MCP protocol conversion, authentication, and observability. When you run `pnpm build`, Gram bundles `gram.ts` as the entry point. When you run `pnpm push`, Gram deploys this bundle to their infrastructure.
+
+## Running the MCP server locally
+
+Because we wrapped the Gram server in `withGram`, we need to modify the `src/server.ts` file, which is the server that can run locally.
+
+```ts
+// src/server.ts
+
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { server } from "./gram.ts";
+
+async function run() {
+
+  console.error("Starting MCP server with stdio...");
+  const stdio = new StdioServerTransport();
+  await server.connect(stdio);
+
+  const quit = async () => {
+    console.error("\nShutting down MCP server...");
+    await server.close();
+    process.exit(0);
+  };
+  process.once("SIGINT", quit);
+  process.once("SIGTERM", quit);
+}
+
+run();
+```
+
+Use this command to run the server: 
+
+```
+pnpm dev
+```
+
+You should be redirected to the MCP Inspector in your default browser.
+
+![MCP Inspector](./assets/mcp-inspector.png)
 
 ## Building and deploying
 
