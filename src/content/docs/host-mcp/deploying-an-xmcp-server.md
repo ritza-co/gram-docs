@@ -161,7 +161,7 @@ This creates a Node.js project with the following structure:
 Install `xmcp` and dependencies:
 
 ```bash
-pnpm i xmcp zod@^3.25.76 resend
+pnpm i xmcp zod resend
 ```
 
 ### Adding the send email tool
