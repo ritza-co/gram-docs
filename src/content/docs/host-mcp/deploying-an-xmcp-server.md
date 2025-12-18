@@ -114,7 +114,7 @@ xmcp handles MCP protocol complexity while Gram handles infrastructure and deplo
 
 ## Building an MCP server with xmcp and Gram
 
-You'll build an MCP server with an email-sending tool and an email list resource, then deploy it to Gram. You can find the code for this guide in the [Speakeasy example repository](https://github.com/ritza-co/speakeasy-examples), in the `xgram` directory.
+You'll build an MCP server with an email-sending tool and an email list resource, then deploy it to Gram. You can find the code for this guide in the [Speakeasy example repository](https://github.com/speakeasy-api/examples), in the `xgram` directory.
 
 ## Prerequisites
 
