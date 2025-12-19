@@ -15,7 +15,7 @@ This guide shows you how to build and deploy an MCP server using xmcp (a TypeScr
 
 Key features:
 
-- **File system-based architecture with autodiscovery:** Place tools in `tools/`, resources in `resources/`, and xmcp automatically discovers and registers them
+- **File system-based architecture with autodiscovery:** Place tools in `tools/` and resources in `resources/`, and xmcp automatically discovers and registers them
 - **Hot reloading:** Changes appear immediately during development
 - **Type safety:** Full TypeScript support with type inference from Zod schemas
 - **Flexible deployment:** Built-in adapters for Next.js, Express, Vercel, and serverless platforms
@@ -24,7 +24,7 @@ xmcp provides abstractions for tools, resources, and prompts, as well as middlew
 
 ### xmcp tools
 
-[Tools](https://xmcp.dev/docs/core-concepts/tools) are functions that AI agents can call to perform actions. In xmcp, defining a tool is straightforward:
+[Tools](https://xmcp.dev/docs/core-concepts/tools) are functions that AI agents can call to perform actions. Defining a tool in xmcp is straightforward:
 
 ```typescript
 import { z } from "zod";
